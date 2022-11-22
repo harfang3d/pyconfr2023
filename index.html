@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="favicon.svg" />
+  </head>
+
+<body>
+<script src="remark-latest.min.js"></script>
+<textarea id="source">
+
+class: center, middle
+
+# Portage Python sur Webassembly
+
+
+## Pour quoi, pour qui et comment ?
+
+---
+
+# Sommaire
+
+
+1. Anatomie des Applications python typiques, et leur besoins.
+2. Les clients typiques et leur besoins.
+3. Le Cauchemar du portage.
+4. Simplifier l'accès aux applications via WebAssembly.
+5. Mise en pratique ( hors slide )
+6. conclusion.
+---
+
+# Pour quoi ? Pour des applications.
+
+## Anatomie des Applications python typiques
+
+    - vt100 / vt420 :  fontes à chasse fixe, unicode et sixel
+
+
+    - Applications 2D : framebuffer:plein écran, fenêtrée: X11/Wayland/natif.
+
+
+    - Applications accédant aux capteurs matériels
+        audio/gyro/accel/touch/usb/série/gestion energie.
+
+    - Applications 3D/VR.
+
+
+    - Applications désirant fournir des couches d'accessibilité fiables.
+
+
+---
+# Pour qui ? des utilisateurs variés sur des machines qui le sont encore plus.
+
+    - Windows : pas de vt100/420 ni de serveur X, pas toujours unicode.
+    - systeme de types unix :  pas de vt420, pas toujours unicode.
+    - mac : pas toujours de serveurs X
+
+    - couches 3D hétéroclites : opengl / gles / vulkan / directX / metal.
+
+    - système kiosques : tres hétérogènes et souvent tres restreint.
+    - ultraportables/webos : difficultés pour lancer python.
+
+
+---
+
+    - dans tous les cas des versions hétéroclites de Python et un support tierce partie souvent incomplet ( ou lag => mac).
+    - peut etre une impossiblité d'installer ou d'éxécuter une application avec les simples droits d'utilisateur
+    - et souvent des couches d'accessibilité négligées ou non standardisées.
+
+---
+
+# Le Cauchemar du portage:
+    - problème du portage natif : la méthode difficile est trop difficile ...
+    - Solutions ?
+---
+
+## Le Cauchemar du portage:
+### problème du portage natif : la méthode difficile est trop difficile ...
+
+    - trouver et redistribuer des terminaux vt420 pour toutes les plateformes.
+            mintty / mlterm / mac?
+
+    - utiliser uniquement des dénominateurs communs ?
+        à toutes les platformes graphiques :
+            SDL2
+        et pour tous les capteurs plyer https://github.com/kivy/plyer#supported-apis )
+            NB: le meilleur support de plyer est pour une plateforme non supportée par Python !
+
+    - maintenir des binaires pour toutes les combinaisons hardware+software/os
+        win32/win64/winarm, android x4, GNU/Linux 32/64 x4, ios, macos
+
+    - treize à la douzaine à multiplier par le nombre de version de Python ...
+
+---
+# Le Cauchemar du portage: Solutions ?
+
+    s'écarter des solutions natives semble un bon compromis encombrement/performance.
+
+---
+##    La méthode "lourde" :
+        docker/vmware/vbox/qemu
+---
+##    Les méthodes classiques ( à tendance lourde).
+        kivy - installation d'un python complet pour chaque app.
+        electron - installation d'un browser complet pour chaque app
+
+---
+
+# Simplifier l'accès aux applications via WebAssembly.
+
+    utiliser un python complet ( comme fait kivy )  ?
+
+    utiliser un navigateur deja installé et entretenu par le vendeur ?
+
+---
+
+## Le navigateur internet : vers une machine virtuelle universelle ?
+
+
+Le navigateur EST une machine virtuelle :
+
+    asm.js : poc, lent. Mais plus besoin de coder en javascript !
+
+    aujourd'hui remplacé par WebAssembly : à peine 2x moins rapide que natif.
+
+
+Le navigateur a un accès universel à presque tout les capteurs !
+
+    ramener à nouveau le tableau de plyer, ajouter colonne support navigateur/javascript.
+
+
+
+---
+
+TODO une slide minimum par XP: Mise en pratique / livecoding.
+
+
+    pygbag ( test serveur local + hello world )
+
+
+    pygbag+xtermjs-sixel ( comme évolution/remplacement de la POC python-wasm de Ethan Smith )
+
+
+    pygbag+SDL2 : pygame ( comme évolution/remplacement de replit/kata.games )
+
+
+    pygbag+WebGL : Harfang3D une solution alternative au toolkits 3D en javascript et bien + portable.
+
+
+    pygbag sur mobile via debugger chromium ?
+
+    faire démo opencv / AR en live ?
+
+    balancer un QR sur VPI pour expérience participative via mobile
+    ( eg prog P2P ou système de vote pour questions réponses)
+
+
+
+Revenir à la  slide finale pour les questions
+---
+
+# Conclusion
+
+## Super ça marche ! Mais ( car il y a toujours un mais ...)
+
+    Ne PAS faire la course à la nouveauté ( 64bits/threads/servicesworkers/webgpu/simd-neon)
+    => coller à MVP.
+
+    Ne PAS pousser le hardware.
+    => GLES 1/2 devrait suffire au besoins.
+
+    Programmer de façon éco-responsable sur du vieux matériel.
+
+    Privilégier l'accessibilité. Surtout sur mobile.
+
+
+Car le but est d'amener toutes les applications, à tout le monde, partout.
+
+
+---
+TODO:
+
+timing des chapitres
+
+caler la liste de plyer pour format slide/VPI.
+
+au moins 2 laptop ( ben non j'en ai pas et celui de ma fille est pas adapté du tout )
+
+un point d'acces wifi captif pour experience en live( j'ai )
+
+trouver un env de livecoding self hosted qui passe sur un VPI
+
+avoir une camera filaire+pied sur table pour renvoyer gros plan sur VPI dans le cas d'une démo sur mobile ou devboard
+
+
+</textarea>
+</body>
+<script defer>var slideshow = remark.create();</script>
+</html>
