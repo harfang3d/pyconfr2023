@@ -15,7 +15,6 @@ class: center, middle
 
 # Portage Python sur Webassembly
 
-
 ## Pour quoi, pour qui et comment ?
 
 ---
@@ -39,13 +38,16 @@ class: center, middle
 
 
     - Applications 2D : framebuffer:plein écran, fenêtrée: X11/Wayland/natif.
+        accélération matérielle : GL/GLES/Vulkan/Metal SIMD/NEON OpenCL/CUDA
+        interface : EGL/GLX/DirectX/Metal
 
+    - Applications 3D/VR.
+        accélération matérielle : GL/GLES/Vulkan/Metal SIMD/NEON OpenCL/CUDA
+        interface : EGL/GLX/DirectX/Metal
 
     - Applications accédant aux capteurs matériels
         audio/gyro/accel/touch/usb/série/gestion energie.
-
-    - Applications 3D/VR.
-
+        accès aux bus : usb / i2c / spi etc
 
     - Applications désirant fournir des couches d'accessibilité fiables.
 
@@ -60,8 +62,8 @@ class: center, middle
     - couches 3D hétéroclites : opengl / gles / vulkan / directX / metal.
 
     - système kiosques : tres hétérogènes et souvent tres restreint.
-    - ultraportables/webos : difficultés pour lancer python.
 
+    - ultraportables/webos : difficultés pour lancer python.
 
 ---
 
@@ -93,10 +95,15 @@ class: center, middle
 
     - treize à la douzaine à multiplier par le nombre de version de Python ...
 
+    le problème ne date pas d'hier ! https://en.wikipedia.org/wiki/UNCOL#cite_note-2
+
 ---
 # Le Cauchemar du portage: Solutions ?
 
-    s'écarter des solutions natives semble un bon compromis encombrement/performance.
+    S'écarter des solutions natives semblerait être la solution :
+    mais il faut un bon compromis encombrement/performance/sécurité.
+    Quel argument de vente ? la sécurité !
+
 
 ---
 ##    La méthode "lourde" :
@@ -137,7 +144,21 @@ Le navigateur a un accès universel à presque tout les capteurs !
 TODO une slide minimum par XP: Mise en pratique / livecoding.
 
 
-    pygbag ( test serveur local + hello world )
+---
+
+## pygbag:  test serveur local + hello world avec input
+
+        async.png
+
+
+## pygbag: fibonnaci: montrer que ça ne fonctionne plus
+
+        async-noblock.png
+
+        solution : sched_yield.
+
+        expliquer que la vm python pourrait corriger le probleme au lieu de forcer
+        a écrire du async/await partout (rant!)
 
 
     pygbag+xtermjs-sixel ( comme évolution/remplacement de la POC python-wasm de Ethan Smith )
@@ -169,7 +190,11 @@ Revenir à la  slide finale pour les questions
     => coller à MVP.
 
     Ne PAS pousser le hardware.
-    => GLES 1/2 devrait suffire au besoins.
+    => GLES 1/2 devrait suffire aux besoins.
+
+    Mettez au maximum votre app dans un module, et utilisez des imports relatifs.
+
+    Ne pas perdre son temps à obfusquer le code, annotez le pour le compiler + tard avec mypyc.
 
     Programmer de façon éco-responsable sur du vieux matériel.
 
@@ -188,7 +213,7 @@ caler la liste de plyer pour format slide/VPI.
 
 au moins 2 laptop ( ben non j'en ai pas et celui de ma fille est pas adapté du tout )
 
-un point d'acces wifi captif pour experience en live( j'ai )
+un point d'acces wifi captif pour experience en live( j'ai, mais limite max de client inconnue)
 
 trouver un env de livecoding self hosted qui passe sur un VPI
 
