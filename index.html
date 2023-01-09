@@ -102,17 +102,53 @@ class: center, middle
 
     S'écarter des solutions natives semblerait être la solution :
     mais il faut un bon compromis encombrement/performance/sécurité.
-    Quel argument de vente ? la sécurité !
+    on ne peut avoir les 3 en même temps donc quel argument de vente choisir ?
+
+   
+    Si l'idée ne date pas d'hier pourquoi on a pas de solutions existantes ?
+    en fait il y en a, mais elle ont dévoyé et ont toutes imposé un language ...
+    et/ou des api natives pour les taches courantes : api dures, voire impossible à porter.
+    
+    perl : 1987 - bon début - mais problème pour passer à la version 6 vers la fin.
+
+    python : 1991 pas encombrant (à l'époque) , pas de sécurité, max de performances 
+            -> OS dépendant pour plein d'éléments ( X11/Tk, api win32, différences de libc ... )
+
+    java : 1995 implémentations concurrentes, souvent performance au détriment de la  sécurité 
+            -> problème de license(s)
+
+    nodejs : 2009 pas mal, le seul probleme de taille c'est qu'il ne comprend que le javascript ...
+
+    asm.js : 2013 on prend le dénominateur commun de tout le monde : le C
+    Et on le fait fonctionner dans une vm universelle via compilation : y compris dans nodejs (ouf enfin autre chose que du javascript)
+    ceci constitue un modèle viable et en preuve de concept au lieu de Doom il fait tourner un clone de quake3* en réseau.
+
+    * BananaBread Cube 2: Sauerbraten engine
+
+    WebAssembly : annoncée en 2015 la VM sera partout grace à W3C en 2019, et C/C++/rust compilent sans problème pour cette machine virtuelle.
+    Machine qui elle même est tres facile à compiler partout ou un compilateur C a vu le jour. ( genre 5 minutes sur la  WII pourtant ppc/big-endian )
 
 
+    pourquoi wasm a gagné ? A cause de l'argument de vente choisi: il est idéal c'est la sécurité !
+    WebAssembly n'a pas de registres, et pas de goto. problème réglé c'est une vrai sandbox.
+    Et surtout les gafam en ont besoin sur le web.
+
+    Apres c'est un standard que tout monde peut implémenter ou il veut, comme il veut. Pas de problème de license.
+
+
+Pendant ce temps du coté Python il y a eu ...
+comme personne ne voulait sacrifier les performances ...
 ---
-##    La méthode "lourde" :
-        docker/vmware/vbox/qemu
+
+##    La méthode "force brute" : docker
+    sécurité pas forcément parfaite ...
+    
 ---
 ##    Les méthodes classiques ( à tendance lourde).
-        kivy - installation d'un python complet pour chaque app.
-        electron - installation d'un browser complet pour chaque app
-
+        PyQt : super, mais problème de license. 
+        Kivy : super, mais installation d'un python complet et d'une pile de librairies pour chaque app.
+        Electron+flask : installation d'un browser complet pour chaque app, afin de résoudre les problemes de GUI.
+    sécurité - vraiment - discutable même si code source fourni ( eg supply chain attack ).
 ---
 
 # Simplifier l'accès aux applications via WebAssembly.
