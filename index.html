@@ -114,34 +114,52 @@ class: center, middle
     python : 1991 pas encombrant (à l'époque) , pas de sécurité, max de performances 
             -> OS dépendant pour plein d'éléments ( X11/Tk, api win32, différences de libc ... )
 
+    ruby : tres similaire.
+
+    
+
     java : 1995 implémentations concurrentes, souvent performance au détriment de la  sécurité 
-            -> problème de license(s)
+            -> problème de license(s) 
+    malgré de nombreux frontends jython/jruby/quercusphp ....
 
-    nodejs : 2009 pas mal, le seul probleme de taille c'est qu'il ne comprend que le javascript ...
+    llvm-ir 2000: n'est pas utilisable par les humains, seulement les compilateurs
+    N'a meme pas une machine virtuelle soignée/portable.
 
-    asm.js : 2013 on prend le dénominateur commun de tout le monde : le C
-    Et on le fait fonctionner dans une vm universelle via compilation : y compris dans nodejs (ouf enfin autre chose que du javascript)
+    parrotvm : pas de compilateurs.
+
+
+    nodejs 2009 : pas mal, le seul probleme de taille c'est qu'il ne comprend que le javascript ...
+
+    asm.js 2013 : on prend le dénominateur commun de tout le monde : le C
+    Et on le fait cibler une vm universelle bien moins complexe que llvm : vm qui tourne même dans nodejs (ouf enfin autre chose que du javascript)
     ceci constitue un modèle viable et en preuve de concept au lieu de Doom il fait tourner un clone de quake3* en réseau.
 
     * BananaBread Cube 2: Sauerbraten engine
 
-    WebAssembly : annoncée en 2015 la VM sera partout grace à W3C en 2019, et C/C++/rust compilent sans problème pour cette machine virtuelle.
+    CloudABI (Ed Schouten) ** qui résume les points communs des OS à une cinquante d'appel système
+    donne indirectement naissance à 
+
+    WebAssembly 2015 : la machine virtuelle sera partout grace à W3C en 2019, et C/C++/rust compilent sans problème pour cette machine virtuelle.
     Machine qui elle même est tres facile à compiler partout ou un compilateur C a vu le jour. ( genre 5 minutes sur la  WII pourtant ppc/big-endian )
 
 
-    pourquoi wasm a gagné ? A cause de l'argument de vente choisi: il est idéal c'est la sécurité !
-    WebAssembly n'a pas de registres, et pas de goto. problème réglé c'est une vrai sandbox.
+    pourquoi wasm a gagné ? A cause de l'argument de vente choisi: il est idéal et c'est la sécurité !
+    WebAssembly n'a pas de registres, et pas de goto. problème réglé c'est un vrai bac à sable.
     Et surtout les gafam en ont besoin sur le web.
+    Cerise sur le gateau les performances ne sont pas mauvaises : et à l'ère de la fibre optique et des gigaoctets de ram dans les mobiles
+    l'encombrement ne semble plus un si grand problème.
 
-    Apres c'est un standard que tout monde peut implémenter ou il veut, comme il veut. Pas de problème de license.
+    L'autre point fort :  c'est juste un standard (MVP 1.0) que tout monde peut implémenter ou il veut, comme il veut. Pas de problème de license.
 
 
-Pendant ce temps du coté Python il y a eu ...
+    ** CloudABI is based on the Capsicum lightweight OS capability and sandbox framework developed at the University of Cambridge Computer Laboratory.
+
+Pendant ce temps du coté portabilité Python il y a eu ...
 comme personne ne voulait sacrifier les performances ...
 ---
 
 ##    La méthode "force brute" : docker
-    sécurité pas forcément parfaite ...
+    sécurité pas forcément au point ...
     
 ---
 ##    Les méthodes classiques ( à tendance lourde).
@@ -153,9 +171,10 @@ comme personne ne voulait sacrifier les performances ...
 
 # Simplifier l'accès aux applications via WebAssembly.
 
-    utiliser un python complet ( comme fait kivy )  ?
+    Et si on pouvait utiliser un python complet ( comme fait kivy ) ? Mais commun 
+    à toutes les app 
 
-    utiliser un navigateur deja installé et entretenu par le vendeur ?
+    utiliser la VM d'un navigateur deja installé et entretenu par le vendeur ?
 
 ---
 
@@ -254,6 +273,10 @@ un point d'acces wifi captif pour experience en live( j'ai, mais limite max de c
 trouver un env de livecoding self hosted qui passe sur un VPI
 
 avoir une camera filaire+pied sur table pour renvoyer gros plan sur VPI dans le cas d'une démo sur mobile ou devboard
+
+
+REF:
+CLOUDABI : https://youtu.be/3N29vrPoDv8
 
 
 </textarea>
