@@ -12,6 +12,7 @@
 <textarea id="source">
 
 class: center, middle
+2023/18/02, 11:00
 
 # Portage Python sur Webassembly
 
@@ -139,17 +140,19 @@ class: center, middle
     CloudABI (Ed Schouten) ** qui résume les points communs des OS à une cinquante d'appel système
     donne indirectement naissance à 
 
-    WebAssembly 2015 : la machine virtuelle sera partout grace à W3C en 2019, et C/C++/rust compilent sans problème pour cette machine virtuelle.
+    WebAssembly 2015 :  C/C++/rust compilent sans problème pour une machine virtuelle.
     Machine qui elle même est tres facile à compiler partout ou un compilateur C a vu le jour. ( genre 5 minutes sur la  WII pourtant ppc/big-endian )
 
+    La machine virtuelle sera partout grace à W3C en 2019 !
 
-    pourquoi wasm a gagné ? A cause de l'argument de vente choisi: il est idéal et c'est la sécurité !
+    Pourquoi wasm a gagné ? A cause de l'argument de vente choisi: il est idéal et c'est la sécurité !
     WebAssembly n'a pas de registres, et pas de goto. problème réglé c'est un vrai bac à sable.
     Et surtout les gafam en ont besoin sur le web.
     Cerise sur le gateau les performances ne sont pas mauvaises : et à l'ère de la fibre optique et des gigaoctets de ram dans les mobiles
     l'encombrement ne semble plus un si grand problème.
 
     L'autre point fort :  c'est juste un standard (MVP 1.0) que tout monde peut implémenter ou il veut, comme il veut. Pas de problème de license.
+    Et il n'est pas si compliqué ( tout l'opposé de llvm-ir ou jvm ) : le coût de maintenance devient très faible et il y a une sérieuse batterie de tests.
 
 
     ** CloudABI is based on the Capsicum lightweight OS capability and sandbox framework developed at the University of Cambridge Computer Laboratory.
@@ -274,9 +277,15 @@ trouver un env de livecoding self hosted qui passe sur un VPI
 
 avoir une camera filaire+pied sur table pour renvoyer gros plan sur VPI dans le cas d'une démo sur mobile ou devboard
 
+des T-shirts harfang XXL :D
+
 
 REF:
-CLOUDABI : https://youtu.be/3N29vrPoDv8
+CLOUDABI : 
+    https://youtu.be/3N29vrPoDv8
+
+Is WebAssembly the return of Java Applets & Flash? :
+    https://steveklabnik.com/writing/is-webassembly-the-return-of-java-applets-flash
 
 
 </textarea>
