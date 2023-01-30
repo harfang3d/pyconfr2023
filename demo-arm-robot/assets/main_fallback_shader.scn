@@ -27,8 +27,7 @@
 			0,
 			255
 		],
-		"brdf_map": "core/pbr/brdf.dds",
-		"current_camera": 32,
+		"current_camera": 31,
 		"fog_color": [
 			18,
 			18,
@@ -38,14 +37,14 @@
 		"fog_far": 250.0,
 		"fog_near": 50.0,
 		"probe": {
-			"irradiance_map": "probes/autoshop.hdr.irradiance",
+			"irradiance_map": ".irradiance",
 			"parallax": 0.0,
 			"pos": [
 				0.0,
 				0.0,
 				0.0
 			],
-			"radiance_map": "probes/autoshop.hdr.radiance",
+			"radiance_map": ".radiance",
 			"rot": [
 				0.0,
 				0.0,
@@ -473,7 +472,7 @@
 				4294967295
 			],
 			"disabled": false,
-			"idx": 32,
+			"idx": 31,
 			"name": "camera"
 		}
 	],
@@ -1724,7 +1723,7 @@
 				5.304642058945319e-08
 			],
 			"rot": [
-				89.99995422363281,
+				89.99994659423828,
 				0.0,
 				0.0
 			],
@@ -1868,7 +1867,7 @@
 				2.9541459412030235e-07
 			],
 			"rot": [
-				89.99995422363281,
+				89.99994659423828,
 				0.0,
 				0.0
 			],
