@@ -21,7 +21,7 @@ imgui_img_prg = hg.LoadProgramFromAssets('core/shader/imgui_image')
 
 # load scene
 scene = hg.Scene()
-hg.LoadSceneFromAssets("main.scn", scene, res, hg.GetForwardPipelineInfo())
+hg.LoadSceneFromAssets("main_fallback_shader.scn", scene, res, hg.GetForwardPipelineInfo())
 
 # gather the axis names
 node_list = scene.GetNodes()
