@@ -1,0 +1,31 @@
+{
+	"blend_mode": "opaque",
+	"depth_test": "less",
+	"face_culling": "cw",
+	"flags": [],
+	"program": "core/shader/fallback.hps",
+	"textures": [
+		{
+			"name": "uReflectionMap",
+			"path": "maps/aluminium.png",
+			"stage": 7
+		}
+	],
+	"values": [
+		{
+			"name": "uDiffuseColor",
+			"type": "vec4",
+			"value": [
+				0.3291139602661133,
+				0.3291139602661133,
+				0.3291139602661133,
+				1.0
+			]
+		}
+	],
+	"write_a": true,
+	"write_b": true,
+	"write_g": true,
+	"write_r": true,
+	"write_z": true
+}

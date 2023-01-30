@@ -1,0 +1,7 @@
+{
+	"features": [],
+	"uniforms": [
+		{"name": "uReflectionMap", "type": "Sampler", "channel": 7},
+		{"name": "uDiffuseColor", "type": "Color"}
+	]
+}
