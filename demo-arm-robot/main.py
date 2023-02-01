@@ -9,7 +9,7 @@ hg.WindowSystemInit()
 res_x, res_y = 1024, 720
 win = hg.NewWindow("PyConFr2023", res_x, res_y, 32, hg.WV_Windowed)
 hg.RenderInit(win, hg.RT_OpenGLES)
-hg.RenderReset(res_x, res_y, hg.RF_MSAA4X | hg.RF_MaxAnisotropy)
+hg.RenderReset(res_x, res_y, hg.RF_None)
 
 async def main():
 
@@ -24,9 +24,9 @@ async def main():
 
     # load scene
     scene = hg.Scene()
-    print(27)
-    hg.LoadSceneFromAssets("empty.scn", scene, res, hg.GetForwardPipelineInfo())
-    print(29)
+    print("27(loading scene)")
+    hg.LoadSceneFromAssets("main_fallback_shader.scn", scene, res, hg.GetForwardPipelineInfo())
+    print("29(scene loaded)")
     # gather the axis names
     node_list = scene.GetNodes()
     axis_list = []
@@ -56,7 +56,7 @@ async def main():
     hg.ImGuiInit(10, imgui_prg, imgui_img_prg)
 
     # main loop
-    while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
+    while not hg.ReadKeyboard().Key(hg.K_Escape):
         dt = hg.TickClock()
         view_id = 0
 
