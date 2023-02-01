@@ -35,40 +35,30 @@
 			255
 		],
 		"fog_far": 250.0,
-		"fog_near": 50.0
+		"fog_near": 50.0,
+		"probe": {
+			"irradiance_map": "",
+			"parallax": 0.0,
+			"pos": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"radiance_map": "",
+			"rot": [
+				0.0,
+				0.0,
+				0.0
+			],
+			"scl": [
+				1.0,
+				1.0,
+				1.0
+			],
+			"type": "sphere"
+		}
 	},
 	"key_values": null,
-	"lights": [
-		{
-			"diffuse": [
-				255,
-				255,
-				255,
-				255
-			],
-			"diffuse_intensity": 2.0,
-			"inner_angle": 0.3490658402442932,
-			"outer_angle": 0.7853981852531433,
-			"priority": 1.0,
-			"pssm_split": [
-				10.0,
-				50.0,
-				100.0,
-				200.0
-			],
-			"radius": 0.0,
-			"shadow_bias": 9.999999747378752e-05,
-			"shadow_type": "map",
-			"specular": [
-				255,
-				255,
-				255,
-				255
-			],
-			"specular_intensity": 2.0,
-			"type": "spot"
-		}
-	],
 	"nodes": [
 		{
 			"components": [
@@ -433,18 +423,6 @@
 		{
 			"components": [
 				30,
-				4294967295,
-				4294967295,
-				0,
-				4294967295
-			],
-			"disabled": true,
-			"idx": 30,
-			"name": "main_light"
-		},
-		{
-			"components": [
-				31,
 				0,
 				4294967295,
 				4294967295,
@@ -470,13 +448,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -512,13 +483,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -554,13 +518,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -596,13 +553,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/light_aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -638,13 +588,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/light_aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -680,13 +623,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/light_aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -722,13 +658,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -764,13 +693,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -806,13 +728,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -848,13 +763,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/light_aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -890,13 +798,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/light_aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -932,13 +833,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -974,13 +868,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/light_aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -1016,13 +903,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -1058,13 +938,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -1100,13 +973,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -1142,13 +1008,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -1184,13 +1043,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -1226,13 +1078,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -1268,13 +1113,6 @@
 					"face_culling": "cw",
 					"flags": [],
 					"program": "core/shader/fallback.hps",
-					"textures": [
-						{
-							"name": "uReflectionMap",
-							"path": "maps/aluminium.png",
-							"stage": 7
-						}
-					],
 					"values": [
 						{
 							"name": "uDiffuseColor",
@@ -1836,24 +1674,6 @@
 				1.0,
 				1.0,
 				1.0
-			]
-		},
-		{
-			"parent": null,
-			"pos": [
-				0.0,
-				16.381752014160156,
-				2.9541459412030235e-07
-			],
-			"rot": [
-				89.99994659423828,
-				0.0,
-				0.0
-			],
-			"scl": [
-				1.0,
-				0.9999999403953552,
-				0.9999999403953552
 			]
 		},
 		{
