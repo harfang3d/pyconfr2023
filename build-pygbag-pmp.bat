@@ -1,0 +1,1 @@
+pygbag --ume_block 0 --template noctx.tmpl --cdn https://pygame-web.github.io/showroom/dev/ demo-arm-robot\main.py

@@ -35,28 +35,7 @@
 			255
 		],
 		"fog_far": 250.0,
-		"fog_near": 50.0,
-		"probe": {
-			"irradiance_map": ".irradiance",
-			"parallax": 0.0,
-			"pos": [
-				0.0,
-				0.0,
-				0.0
-			],
-			"radiance_map": ".radiance",
-			"rot": [
-				0.0,
-				0.0,
-				0.0
-			],
-			"scl": [
-				1.0,
-				1.0,
-				1.0
-			],
-			"type": "sphere"
-		}
+		"fog_near": 50.0
 	},
 	"key_values": null,
 	"lights": [
