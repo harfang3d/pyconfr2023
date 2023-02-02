@@ -1,0 +1,34 @@
+{
+	"blend_mode": "opaque",
+	"depth_test": "less",
+	"face_culling": "cw",
+	"flags": [],
+	"program": "core/shader/fallback.hps",
+	"values": [
+		{
+			"name": "uDiffuseColor",
+			"type": "vec4",
+			"value": [
+				1.0,
+				1.0,
+				1.0,
+				1.0
+			]
+		},
+		{
+			"name": "uSelfColor",
+			"type": "vec4",
+			"value": [
+				0.28270047903060913,
+				0.28270047903060913,
+				0.28270047903060913,
+				1.0
+			]
+		}
+	],
+	"write_a": true,
+	"write_b": true,
+	"write_g": true,
+	"write_r": true,
+	"write_z": true
+}

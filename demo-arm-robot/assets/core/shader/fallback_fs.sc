@@ -24,15 +24,22 @@ void main() {
 	float NdotV = clamp(dot(N, V), 0.0, 1.0);
 	
 	// Fresnel values
-	float fake_fresnel = pow(NdotV, 2.0); // remap(fake_fresnel, 0.0, 0.5, 1.0, 0.0);
-	fake_fresnel = remap(fake_fresnel, 0.0, 0.5, 1.0, 0.0);
+	float fake_fresnel = pow(NdotV, 2.0) * 0.85; // remap(fake_fresnel, 0.0, 0.5, 1.0, 0.0);
+	fake_fresnel = 1.0 - remap(fake_fresnel, 0.0, 0.5, 1.0, 0.0);
 	color = vec3(fake_fresnel, fake_fresnel, fake_fresnel);
 	color = clamp(color, 0.0, 1.0);
 	color *= uDiffuseColor.xyz;
 
+	// color = smoothstep(0.45, 0.65, color);
+
 	color += uSelfColor.xyz;
 
-	// color = pow(color, vec3(1.5, 1.5, 1.5)) * 1.5 * uDiffuseColor.w;
+	float top_light = clamp((N.y + 1.0) * 0.5, 0.0, 1.0);
+	top_light = smoothstep(0.25, 0.65, top_light);
+	color += color * top_light * 0.25;
+
+	float specular = smoothstep(0.7, 0.75, R.y);
+	color += vec3(1.0, 1.0, 1.0) * specular;
 
 	gl_FragColor = vec4(color, uDiffuseColor.w);
 }
