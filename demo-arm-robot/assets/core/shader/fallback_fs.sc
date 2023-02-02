@@ -38,8 +38,12 @@ void main() {
 	top_light = smoothstep(0.25, 0.65, top_light);
 	color += color * top_light * 0.25;
 
-	float specular = smoothstep(0.7, 0.75, R.y);
-	color += vec3(1.0, 1.0, 1.0) * specular;
+	vec3 lacquer = clamp(vec3(1.0, 1.0, 1.0) * pow(1.0 - NdotV, 2.0) * pow((N.y + 1.0) * 0.5, 0.5), 0.0, 1.0);
+	color *= NdotV;
+	color += lacquer;
+
+	float specular = smoothstep(0.8, 0.85, R.y);
+	color = mix(color, vec3(1.0, 1.0, 1.0), specular);
 
 	gl_FragColor = vec4(color, uDiffuseColor.w);
 }
