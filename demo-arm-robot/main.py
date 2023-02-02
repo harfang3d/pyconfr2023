@@ -56,7 +56,7 @@ async def main():
     hg.ImGuiInit(10, imgui_prg, imgui_img_prg)
 
     # main loop
-    while not hg.ReadKeyboard().Key(hg.K_Escape):
+    while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
         dt = hg.TickClock()
         view_id = 0
 
