@@ -1,7 +1,8 @@
 {
 	"features": [],
 	"uniforms": [
-		{"name": "uReflectionMap", "type": "Sampler", "channel": 7},
-		{"name": "uDiffuseColor", "type": "Color"}
+		{"name": "uDiffuseColor", "type": "Color", "value": [1.0, 1.0, 1.0, 1.0]},
+		{"name": "uSelfColor", "type": "Color", "value": [0.0, 0.0, 0.0, 1.0]},
+		{"name": "uMatAttribute", "type": "Vec4"}
 	]
 }
