@@ -33,24 +33,34 @@ class: center, middle
 
 # Pour quoi ? Pour des applications.
 
-## Anatomie des Applications python typiques
+    - vt100 / vt420 :  fontes à chasse fixe.
+    Mais moderne avec support d'unicode, d'image sixel
+    et de liens que l'on peut cliquer
 
-    - vt100 / vt420 :  fontes à chasse fixe, unicode et sixel
+    - traitement de données avec des ressources distantes
+     ou via socket pour les base de données + traditionnelles
 
 
     - Applications 2D : framebuffer:plein écran, fenêtrée: X11/Wayland/natif.
-        accélération matérielle : GL/GLES/Vulkan/Metal SIMD/NEON OpenCL/CUDA
-        interface : EGL/GLX/DirectX/Metal
+        accélération matérielle : SIMD/NEON
 
-    - Applications 3D/VR.
-        accélération matérielle : GL/GLES/Vulkan/Metal SIMD/NEON OpenCL/CUDA
-        interface : EGL/GLX/DirectX/Metal
+    - Applications 3D/VR/Compute.
+        accélération matérielle : GL/GLES/Vulkan/Metal OpenCL/CUDA
+        interface : EGL/GLX/DirectX/Metal 1 & 2
 
     - Applications accédant aux capteurs matériels
         audio/gyro/accel/touch/usb/série/gestion energie.
         accès aux bus : usb / i2c / spi etc
 
     - Applications désirant fournir des couches d'accessibilité fiables.
+
+
+     intentionnellement pas de Web dans cette liste :
+
+    Si vous avez une app en django/flask/quart ou d'autre outils web ne changez
+    rien WebAssembly ne va probablement pas révolutionner votre univers.
+   WebAssembly est pratique pour tout sauf pour faire du frontend Web.
+
 
 
 ---
@@ -64,13 +74,24 @@ class: center, middle
 
     - système kiosques : tres hétérogènes et souvent tres restreint.
 
-    - ultraportables/webos : difficultés pour lancer python.
+    - ultraportables/webos : difficultés pour lancer Python, se le procurer ou l’adapter aux besoins.
+
+    Cas d'android ou il est difficile de lancer une application 100% python sans passer par une application tierce
+
+    difficulté pour installer ( side-loading ) des applications métiers qui ne respecteraient pas les conditions d'utilisation d'un "store"
+
+    conditions qui changent au fil du temps ou voire même oblige a changer de matériel.
+
 
 ---
 
-    - dans tous les cas des versions hétéroclites de Python et un support tierce partie souvent incomplet ( ou lag => mac).
+    - dans tous les cas des versions hétéroclites de Python et un support tierce partie souvent incomplet
+    ou qui lag derrriere les changement d'OS comme sur mac.
     - peut etre une impossiblité d'installer ou d'éxécuter une application avec les simples droits d'utilisateur
     - et souvent des couches d'accessibilité négligées ou non standardisées.
+
+    [ une mention spéciale pour certains environnements bardés d'antivirus qui génèrent des faux positifs sur beaucoup d'applications opensource.
+    ou "maison" faites avec pyinstaller par exemple. Le cas est récurrent dans les "game jam" ou dans les dépendances binaires de Python. ]
 
 ---
 
@@ -86,20 +107,33 @@ class: center, middle
             mintty / mlterm / mac?
 
     - utiliser uniquement des dénominateurs communs ?
+
         à toutes les platformes graphiques :
-            SDL2
+            DirectFB : trop bas niveau.
+            SDL1, car SDL2 a fait des compromis et le framebuffer/rendu logiciel n'est plus aussi bien supporté qu'avant.
+
         et pour tous les capteurs plyer https://github.com/kivy/plyer#supported-apis )
+
+    [ IMAGE PLYER ]
+
             NB: le meilleur support de plyer est pour une plateforme non supportée par Python !
+
 
     - maintenir des binaires pour toutes les combinaisons hardware+software/os
         win32/win64/winarm, android x4, GNU/Linux 32/64 x4, ios, macos
 
-    - treize à la douzaine à multiplier par le nombre de version de Python ...
+    - ou trouver une couche d'accessibilité pour un linux embarqué  sans passer par android ?
 
-    le problème ne date pas d'hier ! https://en.wikipedia.org/wiki/UNCOL#cite_note-2
+
+    Treize à la douzaine à multiplier par le nombre de version de Python ...  (NxM)
+
+
 
 ---
 # Le Cauchemar du portage: Solutions ?
+
+
+    le problème ne date pas d'hier ! https://en.wikipedia.org/wiki/UNCOL#cite_note-2
 
     S'écarter des solutions natives semblerait être la solution :
     mais il faut un bon compromis encombrement/performance/sécurité.
@@ -111,9 +145,18 @@ class: center, middle
     et/ou des api natives pour les taches courantes : api dures, voire impossible à porter.
 
 --
-    Pourtant au fil du temps, il y a eu de nombreuses VM comme :
+    Pourtant au fil du temps, il y a eu de nombreuses VM :
 
-    perl : 1987 - bon début - mais problème pour passer à la version 6 vers la fin.
+    Mais elles ont dévoyé et plus ou moins essayé d’imposer un langage …
+    et/ou des api natives pour les tâches courantes : api dures, voire impossible à porter.
+
+
+    pascal : UCSD Pascal 1977 utilisait du bytecode "p-code".
+       Merci wikipedia sinon je n'en aurais jamais entendu parler.
+
+
+    perl : 1987 - bon début - mais problème faire adopter la version 6 vers la fin qui pourtant est une implémentation assez valable du concept appelée parrot
+
 
     python : 1991 pas encombrant (à l'époque) , pas de sécurité pour maximiser les performances
             -> OS dépendant pour plein d'éléments ( X11/Tk, api win32, différences de libc ... )
@@ -121,14 +164,22 @@ class: center, middle
     ruby : assez similaire.
 
 
-    java : 1995 implémentations concurrentes, souvent performance au détriment de la  sécurité avec jni
+    java : 1995
+        - implémentations concurrentes,
+        - souvent des performance au détriment de la  sécurité avec jni
         malgré de nombreux frontends jython/jruby/quercus(php)
-        la mayonnaise ne prend pas et probablement problème de license(s)
+    la mayonnaise ne prend pas et probablement problème de license(s)
 
-    llvm-ir 2000: n'est pas utilisable par les humains, seulement les compilateurs
-    N'a meme pas une machine virtuelle soignée/portable.
 
-    parrotvm : pas de compilateurs.
+    llvm-ir 2000:
+        n'est pas utilisable par les humains, seulement les compilateurs
+        N'a meme pas une machine virtuelle soignée/portable.
+
+
+    2016: le perroquet n'est pas mort, ce qui prouve que les bonnées idées ne meurent jamais
+        mais la vm ne semble finalement que servir Perl 6.
+
+
 
 --
     et même des tentatives "universelles" (en apparence) sur le web :
@@ -149,16 +200,27 @@ class: center, middle
     nodejs 2009 : pas mal, le seul probleme de taille c'est qu'il ne comprend que le javascript ...
 
     asm.js 2013 : on prend le dénominateur commun de tout le monde : le C
-    Et on le fait cibler une vm universelle bien moins complexe que llvm : vm qui tourne même dans nodejs (ouf enfin autre chose que du javascript)
-    ceci constitue un modèle viable et en preuve de concept au lieu de Doom il fait tourner un clone de quake3* en réseau.
+    Et on le fait cibler une vm universelle bien moins complexe que llvm : vm qui tourne même dans nodejs
+
+    ouf enfin autre chose que du javascript et même si c'est de l'assembleur on va lui donner une chance ...
+
+    Ceci constitue un modèle viable et en preuve de concept au lieu de Doom il fait tourner un clone de quake3* en réseau.
 
     * BananaBread Cube 2: Sauerbraten engine
+
+    Et dans Firefox il est plutôt rapide mais le navigateur a discretement été optimisé pour.
+
 
     CloudABI (Ed Schouten) ** qui résume les points communs des OS à une cinquante d'appel système
     donne indirectement naissance à
 
     WebAssembly 2015 :  C/C++/rust compilent sans problème pour une machine virtuelle.
     Machine qui elle même est tres facile à compiler partout ou un compilateur C a vu le jour. ( genre 5 minutes sur la  WII pourtant ppc/big-endian )
+
+
+
+
+
 
     La machine virtuelle sera partout grace à W3C en 2019 !
 

@@ -1,17 +1,30 @@
 # Demo project for Python Convention France 2023
 
 import asyncio
+import sys
 import harfang as hg
 
 hg.InputInit()
 hg.WindowSystemInit()
 
 res_x, res_y = 1024, 720
+vp_width , vp_height = res_x, res_y
+
 win = hg.NewWindow("PyConFr2023", res_x, res_y, 32, hg.WV_Windowed)
 hg.RenderInit(win, hg.RT_OpenGLES)
 hg.RenderReset(res_x, res_y, hg.RF_None)
 
+
+def on_resize3d(ev):
+    global vp_width, vp_height
+    vp_width = int(ev.width)
+    vp_height = int(ev.height)
+    print("resize:", vp_width,vp_height)
+
+
 async def main():
+    if sys.platform == "emscripten":
+        platform.EventTarget.addEventListener(None, "resize3d", on_resize3d )
 
     #
     pipeline = hg.CreateForwardPipeline()
@@ -66,7 +79,7 @@ async def main():
 
         # GUI
         # view_id = view_id + 1
-        hg.ImGuiBeginFrame(res_x, res_y, hg.TickClock(), hg.ReadMouse(), hg.ReadKeyboard())
+        hg.ImGuiBeginFrame(vp_width, vp_height, hg.TickClock(), hg.ReadMouse(), hg.ReadKeyboard())
 
         if hg.ImGuiBegin("Robot Arm", True, hg.ImGuiWindowFlags_NoMove | hg.ImGuiWindowFlags_NoResize):
             hg.ImGuiSetWindowPos("Robot Arm", hg.Vec2(res_x / 40, res_y - (res_y / 2.45)), hg.ImGuiCond_Once)
