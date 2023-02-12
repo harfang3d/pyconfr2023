@@ -1,0 +1,59 @@
+<html><head><meta charset="utf-8"></head><script src="/pygbag/0.7/pythons.js" data-cols=80 data-lines=25 data-os="vtx" type=module id="__main__" async defer>#<!--
+    
+print("\n"*8)
+    
+print("Salut à vous")
+
+
+if 0:
+    import sys
+    if sys.platform not in ('emscripten','wasi'):
+    
+        def patch_input():
+            import builtins
+            builtins_input = input
+            async def async_input(prompt=""):
+                return builtins_input(prompt)
+            builtins.input = async_input
+    
+        patch_input()
+        del patch_input
+
+
+    
+    import asyncio
+        
+    async def main():
+        color = await input("\nwhat is your favorite colour ? ")
+        print(f" {color=} ")
+    
+    if __name__ == "__main__":
+        asyncio.run(main())
+    
+    
+
+print("\n"*8)
+print("bye")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# --></script></html>

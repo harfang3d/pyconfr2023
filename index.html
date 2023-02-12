@@ -12,26 +12,118 @@
 <textarea id="source">
 
 class: center, middle
-2023/18/02, 11:00
 
 # Portage Python sur Webassembly
 
-## Pour quoi, pour qui et comment ?
+## 2023/02/18, 11:00
+
+## [Comment ?](http://localhost:8000/#2)
+
+
+[top]: http://localhost:8000/#1
+[home]: http://localhost:8000/#2
+
+
+
+
+
+
+???
+http://localhost:8000/#2
+---
+
+Outils utilisés: pygbag 0.7 (git) + Chromium Appimage.
+
+1. Ce qu'il ne faut pas faire : [du html](http://localhost:8000/#4)
+
+1. Les Terminaux [vt100/vt420](http://localhost:8000/#5)
+
+1.
+
+1.
+
+
+[TOP][top]
+???
+http://localhost:8000/#3
+---
+
+embedding
+
+
+Mais si le but est un document interactif et ressemble même vaguement à un cahier scientifique :
+    Utilisez JupyterLite+pyodide
+
+Vous faites une application accessible ? Dans ce cas oui utilisez python+web
+ - publiez des modules pour amméliorer ce type d'applications
+ - militez pour qu'il fonctionnent aussi correctement avec pyscript/Brython/Skulpt.
+
+
+Attention pas de hâte:
+l'interfaçage avec le contenu web (DOM) n'est pas encore normalisé
+entre les différents exécuteurs python sur le web !
+Le temps est à la concertation.
+
+
+[RETOUR INDEX][home]
+
+
+
+
+
+???
+http://localhost:8000/#3
 
 ---
 
-# Sommaire
+HTML
+
+Bien sûr il faut en parler, car tout le monde est tenté au 1er abord de faire du
+web dans un navigateur côté client. C'est tout à fait possible et même assez simple.
+Toutefois sur le long terme - à mon avis - il n'y a que peu
+de domaines d'application réalistes.
 
 
-1. Anatomie des Applications python typiques, et leur besoins.
-2. Les clients typiques et leur besoins.
-3. Le Cauchemar du portage.
-4. Simplifier l'accès aux applications via WebAssembly.
-5. Mise en pratique ( hors slide )
-6. conclusion.
+Un usage intermédiaire comme l'inclusion est + souhaitable, par exemple
+[pour de la documentation](http://localhost:8000/live/embedding.html) liée à l'utilisation de python
+ou d'un de ses modules.
+
+
+[RETOUR INDEX][home]
+
+???
+http://localhost:8000/#5
 ---
 
-# Pour quoi ? Pour des applications.
+## Terminaux
+
+### python-script :
+
+[`<`url`>`/live/terminal-stdio.html?-i](http://localhost:8000/live/terminal-stdio.html?-i)
+```terminal
+python3 -x live/terminal-stdio.html
+```
+
+### python-app :
+
+REPL:
+
+[`<`url`>`/python.html?-i](http://localhost:8000/python.html?-i)
+
+Ligne de commande :
+
+[`<`url`>`/python.html?-i#live/terminal-stdio/terminal-stdio-argv.py](http://localhost:8000/python.html?-i#live/terminal-stdio/terminal-stdio-argv.py)
+
+
+[RETOUR INDEX][home]
+
+???
+http://localhost:8000/#4
+---
+class: center, middle
+# Notes
+---
+Pour quoi ? Pour des applications polyvalentes et très dynamiques.
 
     - vt100 / vt420 :  fontes à chasse fixe.
     Mais moderne avec support d'unicode, d'image sixel
@@ -122,7 +214,7 @@ class: center, middle
     - maintenir des binaires pour toutes les combinaisons hardware+software/os
         win32/win64/winarm, android x4, GNU/Linux 32/64 x4, ios, macos
 
-    - ou trouver une couche d'accessibilité pour un linux embarqué  sans passer par android ?
+    - ou trouver une couche d'accessibilité pour un linux embarqué sans passer par android ?
 
 
     Treize à la douzaine à multiplier par le nombre de version de Python ...  (NxM)
@@ -136,26 +228,26 @@ class: center, middle
     le problème ne date pas d'hier ! https://en.wikipedia.org/wiki/UNCOL#cite_note-2
 
     S'écarter des solutions natives semblerait être la solution :
-    mais il faut un bon compromis encombrement/performance/sécurité.
+    mais il faut un bon compromis simplicité/performance/sécurité.
     on ne peut avoir les 3 en même temps donc quel argument de vente choisir ?
 
 
     Si l'idée ne date pas d'hier pourquoi on a pas de solutions existantes ?
-    en fait il y en a, mais elle ont dévoyé et ont toutes imposé un language ...
-    et/ou des api natives pour les taches courantes : api dures, voire impossible à porter.
+
 
 --
-    Pourtant au fil du temps, il y a eu de nombreuses VM :
-
+    en fait il y en a:
+    au fil du temps, il y a eu de nombreuses machines virtuelles offrant un niveau d’abstraction pour des langages de haut niveau
     Mais elles ont dévoyé et plus ou moins essayé d’imposer un langage …
-    et/ou des api natives pour les tâches courantes : api dures, voire impossible à porter.
+    et/ou des api natives pour les taches courantes : api dures, voire impossible à porter.
 
 
-    pascal : UCSD Pascal 1977 utilisait du bytecode "p-code".
+    pascal : UCSD Pascaln, en 1977 utilisait du bytecode appelé "p-code".
        Merci wikipedia sinon je n'en aurais jamais entendu parler.
 
 
-    perl : 1987 - bon début - mais problème faire adopter la version 6 vers la fin qui pourtant est une implémentation assez valable du concept appelée parrot
+    perl : 1987 - bon début - mais problème à faire adopter la version 6 vers la fin
+    qui pourtant est une implémentation assez valable du concept et appelée parrot
 
 
     python : 1991 pas encombrant (à l'époque) , pas de sécurité pour maximiser les performances
@@ -165,8 +257,9 @@ class: center, middle
 
 
     java : 1995
-        - implémentations concurrentes,
-        - souvent des performance au détriment de la  sécurité avec jni
+        - implémentations concurrentes
+        - Gestion de la mémoire déconcertante.
+        - souvent des performances au détriment de la  sécurité avec jni
         malgré de nombreux frontends jython/jruby/quercus(php)
     la mayonnaise ne prend pas et probablement problème de license(s)
 
@@ -176,9 +269,11 @@ class: center, middle
         N'a meme pas une machine virtuelle soignée/portable.
 
 
-    2016: le perroquet n'est pas mort, ce qui prouve que les bonnées idées ne meurent jamais
-        mais la vm ne semble finalement que servir Perl 6.
+    en 2016 le perroquet n'etait pas mort, même si finalement en 2019 Perl 6 semble l'être*.
+    Probablement faute de compilateurs.
 
+
+    * devenu Raku sur MoarVM
 
 
 --
@@ -196,42 +291,75 @@ class: center, middle
 
 --
 
+[ apparté ]
 
-    nodejs 2009 : pas mal, le seul probleme de taille c'est qu'il ne comprend que le javascript ...
+    Si on étudie au cas par cas il semblerait que la partie compilateur soit la
+    plus complexe à gérer. Peut être le problème a-t-il été abordé dans le mauvais sens ?
 
-    asm.js 2013 : on prend le dénominateur commun de tout le monde : le C
-    Et on le fait cibler une vm universelle bien moins complexe que llvm : vm qui tourne même dans nodejs
 
-    ouf enfin autre chose que du javascript et même si c'est de l'assembleur on va lui donner une chance ...
+
+[ reprenons l'histoire ]
+
+    nodejs 2009 : "v8" pas mal, le seul probleme de taille c'est qu'il ne comprend que le javascript ...
+
+    asm.js 2013 : on prend le dénominateur commun de quasi tout le monde : le C
+    Et on le fait cibler une vm universelle bien moins complexe que llvm : un vm qui tourne même dans nodejs
+    implémentée au sein même du langage javascript. Elle profite des puissants moteurs JIT développés à grand frais
+    pour accélérer javascript.
+
+
+    ouf enfin autre chose que du javascript donc même si c'est de l'assembleur autant lui donner une chance ...
+
+    De toute façons le code javascript "minifié" ressemblait déjà à de l'assembleur !
 
     Ceci constitue un modèle viable et en preuve de concept au lieu de Doom il fait tourner un clone de quake3* en réseau.
 
     * BananaBread Cube 2: Sauerbraten engine
 
-    Et dans Firefox il est plutôt rapide mais le navigateur a discretement été optimisé pour.
+    Et dans Firefox il est plutôt rapide même si le navigateur a discrètement été optimisé pour.
 
 
     CloudABI (Ed Schouten) ** qui résume les points communs des OS à une cinquante d'appel système
     donne indirectement naissance à
 
     WebAssembly 2015 :  C/C++/rust compilent sans problème pour une machine virtuelle.
-    Machine qui elle même est tres facile à compiler partout ou un compilateur C a vu le jour. ( genre 5 minutes sur la  WII pourtant ppc/big-endian )
+    Machine qui elle même est tres facile à compiler partout ou un compilateur C a vu le jour.
+    Genre 5 minutes sur la  WII qui est pourtant powerpc/big-endian.
 
 
 
+---
 
 
+    La machine virtuelle sera partout grâce à W3C en 2019 !
 
-    La machine virtuelle sera partout grace à W3C en 2019 !
+    Pourquoi wasm a gagné ?
 
-    Pourquoi wasm a gagné ? A cause de l'argument de vente choisi: il est idéal et c'est la sécurité !
+    Sécurité et simplicité
+
+        - Le 1er argument de vente choisi est idéal et c'est la sécurité !
+
+        - WebAssembly est composé d’un microprocesseur simple : pas de registres, pas de goto == nombreux problèmes de sécurité réglés : c'est un vrai bac à sable.
+
+
     WebAssembly n'a pas de registres, et pas de goto. problème réglé c'est un vrai bac à sable.
-    Cerise sur le gateau les performances ne sont pas mauvaises : et à l'ère de la fibre optique et des gigaoctets de ram dans les mobiles
-    l'encombrement ne semble plus un si grand problème.
+
+    Cerise sur le gateau les performances ne sont pas mauvaises.
+    Sur certaines architectures on peut même transformer le code machine wasm en code natif ( AOT )
+
+    Certain aspect du design sacrifie l'encombrement pour obtenir + de simplicité mais
+    à l'ère de la fibre optique et des gigaoctets de ram dans les mobiles :
+         l'encombrement ne semble plus un si grand problème.
+
+
     L'autre point fort :  c'est juste un standard (MVP 1.0) que tout monde peut implémenter ou il veut, comme il veut. Pas de problème de license.
     Et il n'est pas si compliqué ( tout l'opposé de llvm-ir ou jvm ) : le coût de maintenance devient très faible et il y a une sérieuse batterie de tests.
 
-    Et surtout les gafam en ont besoin sur le web.
+
+    Et surtout les GAFAM en ont besoin sur le web [.]
+
+
+
 ---
     Mais même les PME/TPE en ont besoin:
 ---
@@ -252,16 +380,16 @@ FRA:
 
 https://youtu.be/AOGFXxhKGWw?t=89
 
---> SI ON PEUT interface DearImGUI + Bras Robot qui réagit à l'interface en vrai.
+SI ON PEUT interface DearImGUI + Bras Robot qui réagit à l'interface en vrai.
 
 ---
 
 
-
+CHECK TIME
 
 
 ---
--------- FACULTIF  --------------
+-------- FACULTATIF  --------------
 
 
 Pendant ce temps du coté portabilité Python il y a eu ...
@@ -278,7 +406,7 @@ comme personne ne voulait sacrifier les performances ...
         Electron+flask : installation d'un browser complet pour chaque app, afin de résoudre les problemes de GUI.
     sécurité - vraiment - discutable même si code source fourni ( eg supply chain attack ).
 
--------- FACULTIF  --------------
+-------- /FACULTATIF  --------------
 
 ---
 
@@ -286,9 +414,9 @@ comme personne ne voulait sacrifier les performances ...
 # Simplifier l'accès aux applications via WebAssembly.
 
     Et si on pouvait utiliser un python complet ( comme fait kivy ) ? Mais commun
-    à toutes les app
+    à toutes les applications.
 
-    utiliser la VM d'un navigateur deja installé et entretenu par le vendeur ?
+    utiliser la VM d'un navigateur deja installée et entretenue par le vendeur ?
 
 ---
 
@@ -301,12 +429,15 @@ Le navigateur EST une machine virtuelle :
 
     aujourd'hui remplacé par WebAssembly : à peine 2x moins rapide que natif.
 
+    on y a bien Terminaux, 2D (canvas, framebuffers) / 3D (WebGL, WebGPU ) / Audio (in/out)
+
 
 Le navigateur a un accès universel à presque tout les capteurs !
 
     ramener à nouveau le tableau de plyer, ajouter colonne support navigateur/javascript.
 
 
+    et une très bonne couche d'accessibilité.
 
 ---
 

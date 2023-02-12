@@ -20,7 +20,7 @@ fi
 
 
 $BROWSER \
- --password-store=basic  --disable-cookie-encryption --user-data-dir=$(pwd)/webdev.pro \
+ --password-store=basic  --disable-cookie-encryption --user-data-dir=$(pwd)/ide/webdev.pro \
  --no-default-browser-check --test-type  --auto-open-devtools-for-tabs \
  --aggressive-cache-discard --disable-notifications --disable-remote-fonts \
  --disable-voice-input --enable-aggressive-domstorage-flushing --disable-shared-workers \
