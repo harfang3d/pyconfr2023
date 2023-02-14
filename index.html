@@ -17,11 +17,11 @@ class: center, middle
 
 ## 2023/02/18, 11:00
 
-## [Comment ?](http://localhost:8000/#2)
+## [Comment ?](#2)
 
 
-[top]: http://localhost:8000/#1
-[home]: http://localhost:8000/#2
+[top]: #1
+[home]: #2
 
 
 
@@ -29,37 +29,87 @@ class: center, middle
 
 
 ???
-http://localhost:8000/#2
+#2
 ---
 
-Outils utilisés: pygbag 0.7 (git) + Chromium Appimage.
+Outils utilisés:
+Hôte (laptop) : Chromium Appimage, python3.8+  module http.server (stdlib) et websockify
+Invité (wasm) : libpython 3.11.1 + pygbag 0.7 (git)
 
-1. Ce qu'il ne faut pas faire : [du html](http://localhost:8000/#4)
 
-1. Les Terminaux [vt100/vt420](http://localhost:8000/#5)
+1. Ce qu'il ne faut pas faire : [fibonnacci](#3)
 
-1.
+1. Ce qu'il faut éviter : [Le html](#4)
 
-1.
+1. Les Terminaux : [vt100/vt420](#6)
+
+1. Les Jeux dans le terminal
+
+1. Les Jeux avec pygame
+
+1. IoT : l'internet des objets connectés
+
 
 
 [TOP][top]
+
 ???
-http://localhost:8000/#3
+#3
+---
+Le classique :
+```python
+def fibonacci_of(n):
+    if n in {0, 1}:
+        return n
+    return fibonacci_of(n - 1) + fibonacci_of(n - 2)
+```
+ne fonctionnera pas correctement.
+
+il faut rendre la main à l'OS !
+On pourait pu utiliser des itérateurs mais async/await fait tres bien l'affaire
+
+[`<`url`>`/python.html?-i#live/fib/recursive_yield.py](http://localhost:8000/python.html?-i#live/fib/recursive_yield.py)
+
+
+
+???
+#4
+---
+
+HTML
+
+Bien sûr il faut en parler, car tout le monde est tenté au 1er abord de faire du
+web dans un navigateur côté client. C'est tout à fait possible et même assez simple.
+Toutefois sur le court terme - à mon avis - il n'y a que peu
+de domaines d'application réalistes.
+
+
+Un usage intermédiaire comme l'inclusion est + souhaitable, par exemple
+[pour de la documentation](http://localhost:8000/live/embedding.html)
+liée à l'utilisation de python ou d'un de ses modules.
+
+[RETOUR INDEX][home]
+
+
+???
+#5
 ---
 
 embedding
 
 
-Mais si le but est un document interactif et ressemble même vaguement à un cahier scientifique :
-    Utilisez JupyterLite+pyodide
+Si le but est un document interactif et ressemble même vaguement à un cahier scientifique :
+    Utilisez JupyterLite ou basthon. Leur moteur - pyodide - est fait pour celà.
 
-Vous faites une application accessible ? Dans ce cas oui utilisez python+web
+
+Vous faites une application accessible ou multilingues avec scripts complexes ?
+
+Dans ce cas oui utilisez python+web et :
  - publiez des modules pour amméliorer ce type d'applications
  - militez pour qu'il fonctionnent aussi correctement avec pyscript/Brython/Skulpt.
 
 
-Attention pas de hâte:
+Mais attention : pas de hâte !
 l'interfaçage avec le contenu web (DOM) n'est pas encore normalisé
 entre les différents exécuteurs python sur le web !
 Le temps est à la concertation.
@@ -72,34 +122,14 @@ Le temps est à la concertation.
 
 
 ???
-http://localhost:8000/#3
-
----
-
-HTML
-
-Bien sûr il faut en parler, car tout le monde est tenté au 1er abord de faire du
-web dans un navigateur côté client. C'est tout à fait possible et même assez simple.
-Toutefois sur le long terme - à mon avis - il n'y a que peu
-de domaines d'application réalistes.
-
-
-Un usage intermédiaire comme l'inclusion est + souhaitable, par exemple
-[pour de la documentation](http://localhost:8000/live/embedding.html) liée à l'utilisation de python
-ou d'un de ses modules.
-
-
-[RETOUR INDEX][home]
-
-???
-http://localhost:8000/#5
+#5
 ---
 
 ## Terminaux
 
 ### python-script :
 
-[`<`url`>`/live/terminal-stdio.html?-i](http://localhost:8000/live/terminal-stdio.html?-i)
+[`<`url`>`/live/terminal-stdio.html?-i](live/terminal-stdio.html?-i)
 ```terminal
 python3 -x live/terminal-stdio.html
 ```
@@ -108,20 +138,26 @@ python3 -x live/terminal-stdio.html
 
 REPL:
 
-[`<`url`>`/python.html?-i](http://localhost:8000/python.html?-i)
+[`<`url`>`/python.html?-i](python.html?-i)
 
 Ligne de commande :
 
-[`<`url`>`/python.html?-i#live/terminal-stdio/terminal-stdio-argv.py](http://localhost:8000/python.html?-i#live/terminal-stdio/terminal-stdio-argv.py)
+[`<`url`>`/python.html?-i#live/terminal-stdio/terminal-stdio-argv.py](python.html?-i#live/terminal-stdio/terminal-stdio-argv.py)
 
 
 [RETOUR INDEX][home]
 
+
 ???
-http://localhost:8000/#4
+#6
 ---
+
 class: center, middle
-# Notes
+
+[présentation](https://docs.google.com/presentation/d/1vzk1gcDIIxZgHY-YC4WNH6PdphM1pcPVGBsY8EdUDA8/edit)
+
+# Notes : à la suite
+
 ---
 Pour quoi ? Pour des applications polyvalentes et très dynamiques.
 
@@ -552,6 +588,11 @@ CLOUDABI :
 
 Is WebAssembly the return of Java Applets & Flash? :
     https://steveklabnik.com/writing/is-webassembly-the-return-of-java-applets-flash
+
+Accessiblité :
+https://flet.dev/docs/guides/python/accessibility/
+https://rmll.ubicast.tv/videos/comment-les-aveugles-jouent-ils/
+How Blind People Play Videos Games : https://www.youtube.com/watch?v=PJ1yiHkEL5c
 
 
 </textarea>

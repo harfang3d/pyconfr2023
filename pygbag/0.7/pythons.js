@@ -576,6 +576,8 @@ function feat_gui(debug_hidden) {
         config.user_canvas_managed = config.user_canvas_managed || 0 //??=
         canvas = document.createElement("canvas")
         canvas.id = "canvas"
+        canvas.width = 1
+        canvas.height = 1
         canvas.style.position = "absolute"
         canvas.style.top = "0px"
         canvas.style.right = "0px"
@@ -769,6 +771,7 @@ console.warn("TODO: user defined canvas")
     }
 
     function window_resize_3d(gui_divider) {
+console.log(" @@@@@@@@@@@@@@@@@@@@@@ 3D CANVAS @@@@@@@@@@@@@@@@@@@@@@")
         setTimeout(window_canvas_adjust_3d, 200, gui_divider);
         setTimeout(window.focus, 300);
     }
@@ -1812,9 +1815,13 @@ async function onload() {
     var has_vt = false
 
     for (const feature of vm.config.features) {
+        if (feature.startsWith("3d")) {
+            vm.config.user_canvas_managed = 3
+        }
+
         if (feature.startsWith("embed")) {
 
-            vm.config.user_canvas_managed = 1
+            vm.config.user_canvas_managed = vm.config.user_canvas_managed || 1
 
             const canvas = feat_gui(true)
             if ( canvas.innerHTML.length > 20 ) {

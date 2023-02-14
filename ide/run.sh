@@ -13,9 +13,9 @@ if [ -f "/opt/appimage/Chromium.AppImage" ]
 then
     BROWSER=/opt/appimage/Chromium.AppImage
 else 
-    wget -c https://apprepo.de/appimage/download/chromium --output-document=Chromium.AppImage
-    chmod +x ./Chromium.AppImage
-    BROWSER=$(pwd)/Chromium.AppImage
+    wget -c https://apprepo.de/appimage/download/chromium --output-document=ide/Chromium.AppImage
+    chmod +x ./ide/Chromium.AppImage
+    BROWSER=$(pwd)/ide/Chromium.AppImage
 fi
 
 
