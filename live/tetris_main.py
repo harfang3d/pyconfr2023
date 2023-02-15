@@ -11,6 +11,7 @@ if sys.platform in ('emscripten','wasi'):
     termios.set_raw_mode()
 
     # http://localhost:8000/live/tetris
+    
     aio.fetch.FS("""
 http://localhost:8000/live
 ├── color_scheme.py
