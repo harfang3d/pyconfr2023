@@ -3,6 +3,7 @@
 import asyncio
 import sys
 import harfang as hg
+from math import pi
 
 hg.InputInit()
 hg.WindowSystemInit()
@@ -72,6 +73,16 @@ async def main():
             axis_list.append({"pivot": pivot_name, "axis": axis, "node": node, "angle": angle, "min": angle_min, "max": angle_max})
             print(axis)
 
+    cam = scene.GetNode("camera")
+
+    # sprite display
+    # create a plane model for the final rendering stage
+    vtx_layout = hg.VertexLayoutPosFloatNormUInt8TexCoord0UInt8()
+
+    sprite_size = 0.25
+    sprite_mdl = hg.CreatePlaneModel(vtx_layout, 1 * sprite_size, res_y / res_x * sprite_size, 1, 1)
+    sprite_prg = hg.LoadProgramFromAssets('core/shader/sprite')
+
     hg.ImGuiInit(10, imgui_prg, imgui_img_prg)
 
     # main loop
@@ -81,10 +92,22 @@ async def main():
 
         # 3D
         scene.Update(dt)
+
+        cam_matrix = cam.GetTransform().GetWorld()
+        hg.SetViewPerspective(view_id, 0, 0, res_x, res_y, cam_matrix, 
+                              cam.GetCamera().GetZNear(), cam.GetCamera().GetZFar(), 
+                              hg.FovToZoomFactor(cam.GetCamera().GetFov()))
         view_id, pass_id = hg.SubmitSceneToPipeline(view_id, scene, hg.IntRect(0, 0, res_x, res_y), True, pipeline, res)
 
+        hg.SetViewRect(view_id, 0, 0, res_x, res_y)
+        hg.SetViewClear(view_id, hg.CF_None)
+        sprite_val_uniforms = []
+        sprite_tex_uniforms = []
+        sprite_matrix = hg.TransformationMat4(hg.Vec3(0, 0, 0), hg.Vec3(pi / 2, pi, 0))
+        hg.DrawModel(view_id, sprite_mdl, sprite_prg, sprite_val_uniforms, sprite_tex_uniforms, sprite_matrix)
+        view_id += 1
+
         # GUI
-        # view_id = view_id + 1
         hg.ImGuiBeginFrame(vp_width, vp_height, hg.TickClock(), hg.ReadMouse(), hg.ReadKeyboard())
 
         if hg.ImGuiBegin("Robot Arm", True, hg.ImGuiWindowFlags_NoMove | hg.ImGuiWindowFlags_NoResize):
@@ -108,7 +131,6 @@ async def main():
                     _trs.SetRot(_rot)
         hg.ImGuiEnd()
 
-        hg.SetView2D(view_id, 0, 0, res_x, res_y, -1, 1, hg.CF_None, hg.Color.Black, 1, 0)
         hg.ImGuiEndFrame(view_id)
 
         hg.Frame()
