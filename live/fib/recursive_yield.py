@@ -14,27 +14,39 @@ except:
     aio = None
 
 
-sys.set_int_max_str_digits(0)
+if 0:
+    
+    async def fibonacci_of(n):
+        if n in {0, 1}:  # Base case
+            return n
+        if aio:
+            if aio.delta()>0.010:await asyncio.sleep(0)
+            
+        return await fibonacci_of(n - 1) + await fibonacci_of(n - 2)  # Recursive case
 
 
-cache = {0: 0, 1: 1}
+else:
+    unsafe = 0
+    
+    sys.set_int_max_str_digits(0)
 
-async def fibonacci_of(n):
-    global cache
+    cache = {0: 0, 1: 1}
 
-    if n in cache:  # déja calculé !
+    async def fibonacci_of(n):
+        global cache
+    
+        if n in cache:  # déja calculé !
+            return cache[n]
+    
+        if aio:
+            if aio.delta()>0.010:await asyncio.sleep(0)
+    
+        # calcule et renvoie le nombre de Fibonacci
+        cache[n] = await fibonacci_of(n - 1) + await fibonacci_of(n - 2)  # Recursive case
         return cache[n]
-
-    if aio:
-        if aio.delta()>0.010:await asyncio.sleep(0)
-
-    # calcule et renvoie le nombre de Fibonacci
-    cache[n] = await fibonacci_of(n - 1) + await fibonacci_of(n - 2)  # Recursive case
-    return cache[n]
 
 
 async def main():
-    unsafe = 0
 
     try:
         value = int(sys.argv[-1])

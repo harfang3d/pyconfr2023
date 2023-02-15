@@ -79,6 +79,12 @@ class MyHTTPRequestHandler(server.SimpleHTTPRequestHandler):
 
         ctype = self.guess_type(path)
 
+        if not os.path.isfile(path):
+            self.send_response(404)
+            self.send_header("content-length", 0)
+            self.end_headers()
+            return b""
+
         self.send_response(HTTPStatus.OK)
 
         with open(path, "rb") as f:

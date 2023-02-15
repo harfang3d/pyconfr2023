@@ -5,6 +5,7 @@
     js.SVG     : convert svg to png
     js.FETCH   : async GET/POST via fetch
     js.MM      : media manager
+        js.MM.CAMERA
     js.VT      : terminal creation
     js.FTDI    : usb serial
     js.MISC    : todo
@@ -143,6 +144,11 @@ window.defined = defined
 var prom = {}
 var prom_count = 0
 window.iterator = function * iterator(oprom) {
+    if (prom_count > 32000 ) {
+        console.warn("resetting prom counter")
+        prom_count = 0
+    }
+
     const mark = prom_count++;
     var counter = 0;
     oprom.then( (value) => prom[mark] = value )
@@ -1343,6 +1349,11 @@ window.MM.camera.init = function * (width,height, preview, grabber) {
         width = width || 640
         height = width || 480
 
+        MM.camera.fd = {}
+
+
+        MM.camera.frame = {}
+
         var framegrabber = null
 
         if (window.stdout) {
@@ -1389,24 +1400,76 @@ window.MM.camera.init = function * (width,height, preview, grabber) {
             }
         }
 
-        MM.camera.get_image = async function (device) {
-            device = device || "/dev/video0"
+        const device = "/dev/video0"
+        MM.camera.fd[device] = FS.open(device, "w")
+        const stream = MM.camera.fd[device]
+
+        const reader = new FileReader()
+        if (0) {
+            reader.addEventListener("load", () => {
+                //FS.writeFile(device,  new Int8Array(reader.result) )
+                const stream = MM.camera.fd[device]
+                const data = new Int8Array(reader.result)
+                FS.write(stream, data, 0, data.length, 0)
+                console.log("frame ready in", device)
+                MM.camera.frame[device] = 1
+                }, false
+            )
+        } else {
+            reader.addEventListener("load", () => {
+                const data = new Int8Array(reader.result)
+                FS.write(stream, data, 0, data.length, 0)
+                console.log("frame ready in", device)
+                setTimeout(GRABBER, 40)
+                }, false
+            )
+        }
+
+        async function GRABBER() {
+            MM.camera.get_raw()
+            MM.camera.blob = await framegrabber.convertToBlob({type:"image/png"})
+            reader.readAsArrayBuffer(MM.camera.blob)
+        }
+
+           /*
+
+        MM.camera.get_image =  async function () {
+            MM.camera.frame[device] = undefined
+            framegrabber.getContext("2d").drawImage(localMediaStream, 0, 0)
             MM.camera.get_raw()
             MM.camera.blob = await framegrabber.convertToBlob()
             const reader = new FileReader()
-            reader.addEventListener("load", () => {
-                FS.writeFile(device,  new Int8Array(reader.result) )
+                reader.addEventListener("load", () => {
+                //FS.writeFile(device,  new Int8Array(reader.result) )
+                const stream = MM.camera.fd[device]
+                const data = new Int8Array(reader.result)
+                FS.write(stream, data, 0, data.length, 0)
+                MM.camera.frame[device] = 1
                 console.log("frame ready in", device)
-                }, false
-            );
+            }, false
+        )
             reader.readAsArrayBuffer(MM.camera.blob)
+            await _until(defined)(device,MM.camera.frame)
+        }
+
+        */
+
+        MM.camera.get_image = async function () {
+            MM.camera.frame[device] = undefined
+            MM.camera.get_raw()
+            MM.camera.blob = await framegrabber.convertToBlob()
+            reader.readAsArrayBuffer(MM.camera.blob)
+            await _until(defined)(device, MM.camera.frame)
             return device
         }
+
+
 
         function connection(stream) {
             localMediaStream = vidcap // document.querySelector('video');
             localMediaStream.srcObject = stream
             localMediaStream.onloadedmetadata = function(e) {
+                GRABBER()
                 console.log("video stream ready")
                 MM.camera.started = 1
                 done =1
