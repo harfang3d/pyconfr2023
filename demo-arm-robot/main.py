@@ -7,11 +7,14 @@ import harfang as hg
 hg.InputInit()
 hg.WindowSystemInit()
 
-res_x, res_y = 1024, 720
+res_x, res_y = 800, 800
 vp_width , vp_height = res_x, res_y
 
 win = hg.NewWindow("PyConFr2023", res_x, res_y, 32, hg.WV_Windowed)
-hg.RenderInit(win, hg.RT_OpenGLES)
+if sys.platform == "emscripten":
+    hg.RenderInit(win, hg.RT_OpenGLES)
+else:
+    hg.RenderInit(win, hg.RT_OpenGL)
 hg.RenderReset(res_x, res_y, hg.RF_None)
 
 
@@ -30,7 +33,10 @@ async def main():
     pipeline = hg.CreateForwardPipeline()
     res = hg.PipelineResources()
 
-    hg.AddAssetsFolder("assets_compiled")
+    if sys.platform == "emscripten":
+        hg.AddAssetsFolder("assets_compiled")
+    else:
+        hg.AddAssetsFolder("assets_compiled_GL")
 
     imgui_prg = hg.LoadProgramFromAssets("core/shader/imgui")
     imgui_img_prg = hg.LoadProgramFromAssets("core/shader/imgui_image")
