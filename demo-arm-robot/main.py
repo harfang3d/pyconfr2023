@@ -102,7 +102,7 @@ async def main():
 
         hg.SetViewRect(view_id, 0, 0, res_x, res_y)
         hg.SetViewClear(view_id, hg.CF_None)
-        sprite_val_uniforms = []
+        sprite_val_uniforms = [hg.MakeUniformSetValue('color', hg.Vec4(1, 1, 1, 1)),]
         sprite_tex_uniforms = [hg.MakeUniformSetTexture('s_tex', sprite_texture, 0)]
         sprite_matrix = hg.TransformationMat4(hg.Vec3(0, 0, 0), hg.Vec3(pi / 2, pi, 0))
         hg.DrawModel(view_id, sprite_mdl, sprite_prg, sprite_val_uniforms, sprite_tex_uniforms, sprite_matrix)
