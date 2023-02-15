@@ -354,15 +354,12 @@ Pour quoi ? Pour des applications polyvalentes et très dynamiques.
 
     Et dans Firefox il est plutôt rapide même si le navigateur a discrètement été optimisé pour.
 
-
-    CloudABI (Ed Schouten) ** qui résume les points communs des OS à une cinquante d'appel système
-    donne indirectement naissance à
-
     WebAssembly 2015 :  C/C++/rust compilent sans problème pour une machine virtuelle.
     Machine qui elle même est tres facile à compiler partout ou un compilateur C a vu le jour.
     Genre 5 minutes sur la  WII qui est pourtant powerpc/big-endian.
 
-
+    CloudABI (Ed Schouten) ** qui résume les points communs des OS à une cinquante d'appel système
+    donne indirectement naissance à WASI ( WebAssembly System Interface )
 
 ---
 
@@ -400,29 +397,15 @@ Pour quoi ? Pour des applications polyvalentes et très dynamiques.
     Mais même les PME/TPE en ont besoin:
 ---
 
-FRA:
 
-- La demande : e-learning avec de la 3D, tourne sur un LMS ("learning management system"), doit s'intégrer dans du HTML5
-
-- les contraintes : dans un environnement corporate ou institutionnel, on ne peut jamais rien installer sur les machines
-
-- pourquoi la 3D ?
-        - pour former des technicien-nes, des mecanicien-nes
-        - pour montrer des dispositifs mécaniques et leurs fonctionnement (animé, interactif)
-        - amméliorer l'interactivité et qualité des interfaces des métiers pour attirer les jeunes talents qui sont habitués aux consoles 3D à la maison.
-
-- Et les interfaces pouvant aussi bien gérer un avatar que le vrai matériel, voire meme partager du code ...
-
-
-https://youtu.be/AOGFXxhKGWw?t=89
-
-SI ON PEUT interface DearImGUI + Bras Robot qui réagit à l'interface en vrai.
 
 ---
 
+FRA
+
+---
 
 CHECK TIME
-
 
 ---
 -------- FACULTATIF  --------------
@@ -454,6 +437,9 @@ comme personne ne voulait sacrifier les performances ...
 
     utiliser la VM d'un navigateur deja installée et entretenue par le vendeur ?
 
+
+    De quoi avoir un OS avec une compatiblité constante au fil du temps.
+
 ---
 
 ## Le navigateur internet : vers une machine virtuelle universelle ?
@@ -472,12 +458,28 @@ Le navigateur a un accès universel à presque tout les capteurs !
 
     ramener à nouveau le tableau de plyer, ajouter colonne support navigateur/javascript.
 
-
     et une très bonne couche d'accessibilité.
 
 ---
 
-TODO une slide minimum par XP: Mise en pratique / livecoding.
+| Feature | Telemetrix | StandardFirmata |
+|-------|:----------:|:-----------------:|
+|     Entrée analogique (DAC)  |       X     |      X           |
+|     Sortie analogique (PWM)    |       X     |      X           |
+|     Entrée Numérique    |       X     |      X           |
+|     Sortie Numérique    |       X     |      X           |
+|     Servo Moteurs   |       X     |      X           |
+|     Motor Pas à Pas |       X     |                 |
+|     Capteurs Temperature/Humidité (DHT)  |       X     |                 |
+|     Télémètre ultrasonique HC-SR04  |       X     |                 |
+|     bus SPI  |       X     |                 |
+|     bus OneWire  |       X     |                 |
+|     bus i2c   |       X     |      X           |
+|    Client Python Asyncio Inclu  |       X     |
+|    Support For STM32 Boards (Black Pill)|       X     |
+|    Extensions utilisateurs  |       X     |                 |
+|    Debugger |       X     |                 |
+|    Documentation pour tout |       X     |                 |
 
 
 ---

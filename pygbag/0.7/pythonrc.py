@@ -332,6 +332,7 @@ if 1:  # defined("embed") and hasattr(embed, "readline"):
                 if ext.endswith(".six"):
                     cls.more(arg)
                     return
+
                 if ext.endswith(".bmp"):
                     surf = pygame.image.load_basic(arg)
                 else:
