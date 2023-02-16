@@ -1358,7 +1358,8 @@ if not aio.cross.simulator:
                     print("1303:", req, "requires patch")
                     platform.patches.pop(req)()
 
-        async def pv(track, prefix="", suffix="", decimals=1, length=70, fill="X", printEnd="\r"):
+        @classmethod
+        async def pv(cls, track, prefix="", suffix="", decimals=1, length=70, fill="X", printEnd="\r"):
 
             # Progress Bar Printing Function
             def print_pg_bar(total, iteration):
