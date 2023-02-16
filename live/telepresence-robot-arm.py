@@ -8,6 +8,8 @@ from math import pi
 hg.InputInit()
 hg.WindowSystemInit()
 
+LED_GPIO = 2
+
 res_x, res_y = 800, 800
 vp_width , vp_height = res_x, res_y
 
@@ -29,6 +31,31 @@ pygame.display.set_caption("pycon fr 2023 IoT test")
 import shutil
 
 
+from telemetrix_aio import telemetrix_aio
+
+
+async def new_motor(board):
+    # set the max speed and acceleration
+    motor = await board.set_pin_mode_stepper(interface=4, pin1=16, pin2=5, pin3=4, pin4=0)
+    await board.stepper_set_max_speed(motor, 100)
+    await board.stepper_set_acceleration(motor, 400)
+    return motor
+    
+
+async def blink(board, pin):
+
+    # set the pin mode
+    await board.set_pin_mode_digital_output(pin)
+
+    # toggle the pin 4 times and exit
+    for x in range(2):
+        print('ON')
+        await board.digital_write(pin, 0)
+        await asyncio.sleep(1)
+        print('OFF')
+        await board.digital_write(pin, 1)
+        await asyncio.sleep(1)
+        
 
 def on_resize3d(ev):
     global vp_width, vp_height
@@ -38,6 +65,7 @@ def on_resize3d(ev):
 
 
 async def main():
+    global motor
     if sys.platform == "emscripten":
         platform.EventTarget.addEventListener(None, "resize3d", on_resize3d )
 
@@ -59,11 +87,24 @@ async def main():
         await shell.runner.pv(track)
 
 
-    #
-    pipeline = hg.CreateForwardPipeline()
-    res = hg.PipelineResources()
+    # default to localhost for telemetrix target.
+    if sys.argv[-1].endswith('.py'):
+        ip_addr = '127.0.0.1'
+    else:
+        ip_addr = sys.argv[-1]
 
 
+    # default websocket mode is wss:// change it when on lan.
+    if sys.platform in ('emscripten',):
+        print('Using websocket')
+        if ip_addr.startswith('192.168.') or ip_addr in ('localhost','127.0.0.1'):
+            window.MM.set_socket("ws://")
+            print(f"Board (Web)socket : {ip_addr}:31335 not using ssl")
+
+    else:
+        print(f"Board socket : {ip_addr}:31335")
+
+        
     #
     pipeline = hg.CreateForwardPipeline()
     res = hg.PipelineResources()
@@ -88,6 +129,13 @@ async def main():
         await asyncio.sleep(0.016)
     else:
         print("could not grab a frame")
+
+        
+    # instantiate telemetrix_aio
+
+    board = telemetrix_aio.TelemetrixAIO(ip_address=ip_addr, autostart=False)
+    await board.start_aio()
+
 
     if sys.platform == "emscripten":
         hg.AddAssetsFolder("assets_compiled")
@@ -149,6 +197,30 @@ async def main():
     hg.ImGuiInit(10, imgui_prg, imgui_img_prg)
 
 
+    await blink(board, LED_GPIO)
+
+    motor  = await new_motor(board)
+
+    IDLE = True
+    
+    def idle_callback():
+        nonlocal IDLE
+        IDLE = True
+        print("motor set")
+
+    async def busy_loop(fangle):
+        nonlocal IDLE
+        if not IDLE:
+            print("error: motor is busy")
+            return
+        pos = int(1.8 * fangle)        
+        print(f"motor going to {pos} steps for {fangle}°")
+        IDLE = False                            
+        await board.stepper_move_to(motor, pos) 
+        await board.stepper_run(motor, completion_callback=idle_callback)
+        print("motor going idle")
+        IDLE = True
+    
     # main loop
     while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
         dt = hg.TickClock()
@@ -199,6 +271,13 @@ async def main():
                     axis["pivot"] + "(" + axis["axis"] + ")", axis["angle"], axis["min"], axis["max"]
                 )
                 if angle_update:
+                    
+                    if axis["node"].GetName() == "_PIVOT_0_Z":
+                        if IDLE:
+                            asyncio.create_task( busy_loop(axis["angle"]) )
+                        else:
+                            print("pivot motor busy")
+                        
                     _trs = axis["node"].GetTransform()
                     _rot = _trs.GetRot()
                     if axis["axis"] == "X":

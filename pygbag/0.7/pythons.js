@@ -1402,7 +1402,7 @@ window.MM.camera.init = function * (width,height, preview, grabber) {
 
         const device = "/dev/video0"
         const reader = new FileReader()
-        const RR = 10
+        const RR = 25
 
         if (0) {
             MM.camera.fd[device] = FS.open(device, "w")
