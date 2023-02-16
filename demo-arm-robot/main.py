@@ -79,17 +79,32 @@ async def main():
     # create a plane model for the final rendering stage
     vtx_layout = hg.VertexLayoutPosFloatNormUInt8TexCoord0UInt8()
 
-    sprite_size = 0.25
-    sprite_mdl = hg.CreatePlaneModel(vtx_layout, 1 * sprite_size, res_y / res_x * sprite_size, 1, 1)
+    sprite_size = 0.5
+    sprite_aspect_ratio = 200 / 320
+    sprite_mdl = hg.CreatePlaneModel(vtx_layout, 1 * sprite_size, res_y / res_x * sprite_size * sprite_aspect_ratio, 1, 1)
     sprite_prg = hg.LoadProgramFromAssets('core/shader/sprite')
     sprite_texture,_ = hg.LoadTextureFromAssets("maps/pyconfr23.png", hg.TF_UBorder | hg.TF_VBorder | hg.TF_SamplerMinAnisotropic | hg.TF_SamplerMagAnisotropic)
+    prev_sprite_texture = None
 
     hg.ImGuiInit(10, imgui_prg, imgui_img_prg)
+
+    webcam_reload_timer = hg.GetClock()
+    webcam_image_index = 0
 
     # main loop
     while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
         dt = hg.TickClock()
         view_id = 0
+
+        if hg.GetClock() - webcam_reload_timer > hg.time_from_sec_f(1.0 / 30.0): # 30 FPS
+            prev_sprite_texture = sprite_texture
+            sprite_texture,_ = hg.LoadTextureFromAssets("maps/img" + str(webcam_image_index) + ".png", hg.TF_UBorder | hg.TF_VBorder | hg.TF_SamplerMinAnisotropic | hg.TF_SamplerMagAnisotropic)
+            hg.DestroyTexture(prev_sprite_texture)
+            scene.GarbageCollect()
+            webcam_image_index += 1
+            if webcam_image_index > 9:
+                webcam_image_index = 0
+            webcam_reload_timer = hg.GetClock()
 
         # 3D
         scene.Update(dt)
@@ -104,7 +119,7 @@ async def main():
         hg.SetViewClear(view_id, hg.CF_None)
         sprite_val_uniforms = [hg.MakeUniformSetValue('color', hg.Vec4(1, 1, 1, 1)),]
         sprite_tex_uniforms = [hg.MakeUniformSetTexture('s_tex', sprite_texture, 0)]
-        sprite_matrix = hg.TransformationMat4(hg.Vec3(0, 0, 0), hg.Vec3(pi / 2, pi, 0))
+        sprite_matrix = hg.TransformationMat4(hg.Vec3(0.65, -0.75, 0), hg.Vec3(pi / 2, pi, 0))
         hg.DrawModel(view_id, sprite_mdl, sprite_prg, sprite_val_uniforms, sprite_tex_uniforms, sprite_matrix)
         view_id += 1
 
