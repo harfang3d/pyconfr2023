@@ -137,7 +137,7 @@ async def main():
     # create a plane model for the final rendering stage
     vtx_layout = hg.VertexLayoutPosFloatNormUInt8TexCoord0UInt8()
 
-    sprite_size = 1
+    sprite_size = 1.5
     sprite_aspect_ratio = 200 / 320
     sprite_mdl = hg.CreatePlaneModel(vtx_layout, 1 * sprite_size, res_y / res_x * sprite_size * sprite_aspect_ratio, 1, 1)
     sprite_prg = hg.LoadProgramFromAssets('core/shader/sprite')
