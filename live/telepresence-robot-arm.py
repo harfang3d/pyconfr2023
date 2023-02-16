@@ -10,6 +10,14 @@ hg.WindowSystemInit()
 
 LED_GPIO = 2
 
+#============ DANGER ZONE ==============
+MOTOR_RATIO = 1.5
+MOTOR_SPEED = 150
+MOTOR_ACCEL = 400
+#=======================================
+
+
+
 res_x, res_y = 800, 800
 vp_width , vp_height = res_x, res_y
 
@@ -37,8 +45,8 @@ from telemetrix_aio import telemetrix_aio
 async def new_motor(board):
     # set the max speed and acceleration
     motor = await board.set_pin_mode_stepper(interface=4, pin1=16, pin2=5, pin3=4, pin4=0)
-    await board.stepper_set_max_speed(motor, 100)
-    await board.stepper_set_acceleration(motor, 400)
+    await board.stepper_set_max_speed(motor, MOTOR_SPEED)
+    await board.stepper_set_acceleration(motor, MOTOR_ACCEL)
     return motor
     
 
@@ -209,11 +217,12 @@ async def main():
         print("motor set")
 
     async def busy_loop(fangle):
+        global MOTOR_RATIO 
         nonlocal IDLE
         if not IDLE:
             print("error: motor is busy")
             return
-        pos = int(1.8 * fangle)        
+        pos = int(MOTOR_RATIO * fangle)        
         print(f"motor going to {pos} steps for {fangle}°")
         IDLE = False                            
         await board.stepper_move_to(motor, pos) 
