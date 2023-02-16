@@ -2,6 +2,22 @@
 
 import asyncio
 import sys
+import harfang as hg
+from math import pi
+
+hg.InputInit()
+hg.WindowSystemInit()
+
+res_x, res_y = 800, 800
+vp_width , vp_height = res_x, res_y
+
+win = hg.NewWindow("PyConFr2023", res_x, res_y, 32, hg.WV_Windowed)
+if sys.platform == "emscripten":
+    hg.RenderInit(win, hg.RT_OpenGLES)
+else:
+    hg.RenderInit(win, hg.RT_OpenGL)
+hg.RenderReset(res_x, res_y, hg.RF_None)
+
 
 
 import pygame
@@ -12,33 +28,18 @@ pygame.display.set_caption("pycon fr 2023 IoT test")
 
 import shutil
 
-import harfang as hg
-from math import pi
-
-hg.InputInit()
-hg.WindowSystemInit()
-
-res_x, res_y = 800, 800
-vp_width, vp_height = res_x, res_y
-
-win = hg.NewWindow("PyConFr2023", res_x, res_y, 32, hg.WV_Windowed)
-if sys.platform == "emscripten":
-    hg.RenderInit(win, hg.RT_OpenGLES)
-else:
-    hg.RenderInit(win, hg.RT_OpenGL)
-hg.RenderReset(res_x, res_y, hg.RF_None)
 
 
 def on_resize3d(ev):
     global vp_width, vp_height
     vp_width = int(ev.width)
     vp_height = int(ev.height)
-    print("resize:", vp_width, vp_height)
+    print("resize:", vp_width,vp_height)
 
 
 async def main():
     if sys.platform == "emscripten":
-        platform.EventTarget.addEventListener(None, "resize3d", on_resize3d)
+        platform.EventTarget.addEventListener(None, "resize3d", on_resize3d )
 
         assets = Path("assets_compiled")
         assets.mkdir()
@@ -57,6 +58,12 @@ async def main():
 
         await shell.runner.pv(track)
 
+
+    #
+    pipeline = hg.CreateForwardPipeline()
+    res = hg.PipelineResources()
+
+
     #
     pipeline = hg.CreateForwardPipeline()
     res = hg.PipelineResources()
@@ -70,7 +77,7 @@ async def main():
     print("-assets lists-")
     await asyncio.sleep(2)
 
-    for df in os.listdir("/tmp/assets_compiled"):
+    for df in os.listdir("assets_compiled"):
         print(df)
     print("-assets mounted-")
 
@@ -83,10 +90,12 @@ async def main():
         print("could not grab a frame")
 
     if sys.platform == "emscripten":
-        if not hg.AddAssetsFolder("/tmp/assets_compiled"):
-            raise Error("Assets Folder")
+        hg.AddAssetsFolder("assets_compiled")
+        if not hg.AddAssetsFolder("/dev"):
+            raise Error("Assets device Folder")
     else:
         hg.AddAssetsFolder("assets_compiled_GL")
+
 
     imgui_prg = hg.LoadProgramFromAssets("core/shader/imgui")
     imgui_img_prg = hg.LoadProgramFromAssets("core/shader/imgui_image")
@@ -128,19 +137,17 @@ async def main():
     # create a plane model for the final rendering stage
     vtx_layout = hg.VertexLayoutPosFloatNormUInt8TexCoord0UInt8()
 
-    sprite_size = 1.0
+    sprite_size = 1
     sprite_aspect_ratio = 200 / 320
     sprite_mdl = hg.CreatePlaneModel(vtx_layout, 1 * sprite_size, res_y / res_x * sprite_size * sprite_aspect_ratio, 1, 1)
-    sprite_prg = hg.LoadProgramFromAssets("core/shader/sprite")
-    sprite_texture, _ = hg.LoadTextureFromAssets(
-        "maps/pyconfr23.png", hg.TF_UBorder | hg.TF_VBorder | hg.TF_SamplerMinAnisotropic | hg.TF_SamplerMagAnisotropic
-    )
-    prev_sprite_texture = None
+    sprite_prg = hg.LoadProgramFromAssets('core/shader/sprite')
+    #sprite_texture,_ = hg.LoadTextureFromAssets("maps/pyconfr23.png", hg.TF_UBorder | hg.TF_VBorder | hg.TF_SamplerMinAnisotropic | hg.TF_SamplerMagAnisotropic)
+    sprite_texture = None
+    prev_sprite_texture = sprite_texture
+    webcam_image_index = 0
 
     hg.ImGuiInit(10, imgui_prg, imgui_img_prg)
 
-    webcam_reload_timer = hg.GetClock()
-    framenum = 0
 
     # main loop
     while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
@@ -148,47 +155,35 @@ async def main():
         view_id = 0
 
         # video feed
-        if framenum < 33 and os.path.isfile("/dev/video0"):  # hg.GetClock() - webcam_reload_timer > hg.time_from_sec_f(1.0 / 30.0): # 30 FPS
-            prev_sprite_texture = sprite_texture
-            shutil.copy("/dev/video0", f"/tmp/assets_compiled/maps/video{framenum}.png")
-            os.unlink("/dev/video0")
-            if not os.path.isfile(f"/tmp/assets_compiled/maps/video{framenum}.png"):
-                franenum = 666
-            else:
-                sprite_texture, _ = hg.LoadTextureFromAssets(
-                    f"maps/video{framenum}.png",
-                    hg.TF_UBorder | hg.TF_VBorder | hg.TF_SamplerMinAnisotropic | hg.TF_SamplerMagAnisotropic,
-                )
-                hg.DestroyTexture(prev_sprite_texture)
-                scene.GarbageCollect()
-                framenum += 1
+        feed = f"/dev/video{webcam_image_index}"
 
-            # webcam_reload_timer = hg.GetClock()
+        if os.path.isfile(feed):  # hg.GetClock() - webcam_reload_timer > hg.time_from_sec_f(1.0 / 30.0): # 30 FPS
+            prev_sprite_texture = sprite_texture
+            shutil.copy(feed, f"assets_compiled/maps/video{webcam_image_index}.png")
+            os.unlink(feed)
+            sprite_texture, _ = hg.LoadTextureFromAssets(
+                f"maps/video{webcam_image_index}.png",
+                hg.TF_UBorder | hg.TF_VBorder | hg.TF_SamplerMinAnisotropic | hg.TF_SamplerMagAnisotropic,
+            )
+            if prev_sprite_texture:
+                hg.DestroyTexture(prev_sprite_texture)
+            scene.GarbageCollect()
+
 
         # 3D
         scene.Update(dt)
 
         cam_matrix = cam.GetTransform().GetWorld()
-        hg.SetViewPerspective(
-            view_id,
-            0,
-            0,
-            res_x,
-            res_y,
-            cam_matrix,
-            cam.GetCamera().GetZNear(),
-            cam.GetCamera().GetZFar(),
-            hg.FovToZoomFactor(cam.GetCamera().GetFov()),
-        )
+        hg.SetViewPerspective(view_id, 0, 0, res_x, res_y, cam_matrix,
+                              cam.GetCamera().GetZNear(), cam.GetCamera().GetZFar(),
+                              hg.FovToZoomFactor(cam.GetCamera().GetFov()))
         view_id, pass_id = hg.SubmitSceneToPipeline(view_id, scene, hg.IntRect(0, 0, res_x, res_y), True, pipeline, res)
 
         hg.SetViewRect(view_id, 0, 0, res_x, res_y)
         hg.SetViewClear(view_id, hg.CF_None)
-        sprite_val_uniforms = [
-            hg.MakeUniformSetValue("color", hg.Vec4(1, 1, 1, 1)),
-        ]
-        sprite_tex_uniforms = [hg.MakeUniformSetTexture("s_tex", sprite_texture, 0)]
-        sprite_matrix = hg.TransformationMat4(hg.Vec3(0, 0, 0), hg.Vec3(pi / 2, pi, 0))
+        sprite_val_uniforms = [hg.MakeUniformSetValue('color', hg.Vec4(1, 1, 1, 1)),]
+        sprite_tex_uniforms = [hg.MakeUniformSetTexture('s_tex', sprite_texture, 0)]
+        sprite_matrix = hg.TransformationMat4(hg.Vec3(0.65, -0.75, 0), hg.Vec3(pi / 2, pi, 0))
         hg.DrawModel(view_id, sprite_mdl, sprite_prg, sprite_val_uniforms, sprite_tex_uniforms, sprite_matrix)
         view_id += 1
 
@@ -225,5 +220,5 @@ async def main():
     hg.RenderShutdown()
     hg.DestroyWindow(win)
 
-
 asyncio.run(main())
+

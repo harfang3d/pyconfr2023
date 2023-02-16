@@ -1347,7 +1347,7 @@ window.MM.camera.init = function * (width,height, preview, grabber) {
         vidcap.autoplay = true
 
         width = width || 640
-        height = width || 480
+        height = height || 480
 
         MM.camera.fd = {}
 
@@ -1401,8 +1401,10 @@ window.MM.camera.init = function * (width,height, preview, grabber) {
         }
 
         const device = "/dev/video0"
-        MM.camera.fd[device] = FS.open(device, "w")
-        const stream = MM.camera.fd[device]
+        if (0) {
+            MM.camera.fd[device] = FS.open(device, "w")
+            const stream = MM.camera.fd[device]
+        }
 
         const reader = new FileReader()
         if (0) {
@@ -1410,7 +1412,8 @@ window.MM.camera.init = function * (width,height, preview, grabber) {
                 //FS.writeFile(device,  new Int8Array(reader.result) )
                 const stream = MM.camera.fd[device]
                 const data = new Int8Array(reader.result)
-                FS.write(stream, data, 0, data.length, 0)
+                //FS.write(stream, data, 0, data.length, 0)
+                FS.writeFile(device,  new Int8Array(reader.result) )
                 console.log("frame ready in", device)
                 MM.camera.frame[device] = 1
                 }, false
@@ -1418,7 +1421,8 @@ window.MM.camera.init = function * (width,height, preview, grabber) {
         } else {
             reader.addEventListener("load", () => {
                 const data = new Int8Array(reader.result)
-                FS.write(stream, data, 0, data.length, 0)
+                //FS.write(stream, data, 0, data.length, 0)
+                FS.writeFile(device,  new Int8Array(reader.result) )
                 console.log("frame ready in", device)
                 setTimeout(GRABBER, 40)
                 }, false
@@ -1430,6 +1434,7 @@ window.MM.camera.init = function * (width,height, preview, grabber) {
             MM.camera.blob = await framegrabber.convertToBlob({type:"image/png"})
             reader.readAsArrayBuffer(MM.camera.blob)
         }
+        window.GRABBER = GRABBER
 
            /*
 
