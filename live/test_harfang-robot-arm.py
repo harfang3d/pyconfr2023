@@ -58,7 +58,7 @@ async def main():
     res = hg.PipelineResources()
 
     if sys.platform == "emscripten":
-        hg.AddAssetsFolder("assets_compiled")
+        hg.AddAssetsFolder("/tmp/assets_compiled")
     else:
         hg.AddAssetsFolder("assets_compiled_GL")
 

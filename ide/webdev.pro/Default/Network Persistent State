@@ -1,1 +1,0 @@
-{"net":{"http_server_properties":{"servers":[{"alternative_service":[{"advertised_alpns":["h3"],"expiration":"13323621782899220","port":443,"protocol_str":"quic"}],"anonymization":["FAAAABAAAABodHRwOi8vbG9jYWxob3N0"],"server":"https://content-autofill.googleapis.com"}],"version":5},"network_qualities":{}}}
