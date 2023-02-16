@@ -11,9 +11,14 @@ hg.WindowSystemInit()
 LED_GPIO = 2
 
 #============ DANGER ZONE ==============
-MOTOR_RATIO = 1.5
-MOTOR_SPEED = 150
-MOTOR_ACCEL = 400
+MOTOR_RATIO = 0.6
+MOTOR_SPEED = 1000
+MOTOR_ACCEL = 512
+
+if MOTOR_SPEED>1000:
+    MOTOR_SPEED=1000
+if MOTOR_ACCEL>1000:
+    MOTOR_ACCEL = 1000
 #=======================================
 
 
@@ -92,6 +97,8 @@ async def main():
 
         track = platform.window.MM.prepare("live/assets_compiled.zip", json.dumps(cfg))
 
+        platform.window.MM.camera.device = "/tmp/assets_compiled/maps/video0.png"
+
         await shell.runner.pv(track)
 
 
@@ -130,13 +137,13 @@ async def main():
         print(df)
     print("-assets mounted-")
 
-    for i in range(0, 100):
-        shutil.copy("/dev/video0", "video0.png")
-        if len(open("video0.png", "rb").read()):
-            break
-        await asyncio.sleep(0.016)
-    else:
-        print("could not grab a frame")
+    # for i in range(0, 100):
+    #     shutil.copy("/dev/video0", "video0.png")
+    #     if len(open("video0.png", "rb").read()):
+    #         break
+    #     await asyncio.sleep(0.016)
+    # else:
+    #     print("could not grab a frame")
 
         
     # instantiate telemetrix_aio
@@ -228,7 +235,11 @@ async def main():
         await board.stepper_move_to(motor, pos) 
         await board.stepper_run(motor, completion_callback=idle_callback)
         print("motor going idle")
+        #await board.stepper_stop(motor)
         IDLE = True
+
+
+    feed = f"/tmp/assets_compiled/maps/video{webcam_image_index}.png"
     
     # main loop
     while not hg.ReadKeyboard().Key(hg.K_Escape) and hg.IsWindowOpen(win):
@@ -236,11 +247,13 @@ async def main():
         view_id = 0
 
         # video feed
-        feed = f"/dev/video{webcam_image_index}"
+        # feed = f"/dev/video{webcam_image_index}"
 
         if os.path.isfile(feed):  # hg.GetClock() - webcam_reload_timer > hg.time_from_sec_f(1.0 / 30.0): # 30 FPS
             prev_sprite_texture = sprite_texture
-            shutil.copy(feed, f"assets_compiled/maps/video{webcam_image_index}.png")
+            
+            #shutil.copy(feed, f"/tmp/assets_compiled/maps/video{webcam_image_index}.png")
+            
             sprite_texture, _ = hg.LoadTextureFromAssets(
                 f"maps/video{webcam_image_index}.png",
                 hg.TF_UBorder | hg.TF_VBorder | hg.TF_SamplerMinAnisotropic | hg.TF_SamplerMagAnisotropic,

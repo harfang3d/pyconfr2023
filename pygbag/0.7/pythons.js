@@ -1400,7 +1400,7 @@ window.MM.camera.init = function * (width,height, preview, grabber) {
             }
         }
 
-        const device = "/dev/video0"
+        const device = MM.camera.device || "/dev/video0"
         const reader = new FileReader()
         const RR = 25
 
