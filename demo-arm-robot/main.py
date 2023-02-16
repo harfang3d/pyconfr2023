@@ -5,6 +5,9 @@ import sys
 import harfang as hg
 from math import pi
 
+hg.SetLogDetailed(False)
+hg.SetLogLevel(0)
+
 hg.InputInit()
 hg.WindowSystemInit()
 
@@ -83,7 +86,8 @@ async def main():
     sprite_aspect_ratio = 200 / 320
     sprite_mdl = hg.CreatePlaneModel(vtx_layout, 1 * sprite_size, res_y / res_x * sprite_size * sprite_aspect_ratio, 1, 1)
     sprite_prg = hg.LoadProgramFromAssets('core/shader/sprite')
-    sprite_texture,_ = hg.LoadTextureFromAssets("maps/pyconfr23.png", hg.TF_UBorder | hg.TF_VBorder | hg.TF_SamplerMinAnisotropic | hg.TF_SamplerMagAnisotropic)
+    sprite_texture = None
+    # sprite_texture,_ = hg.LoadTextureFromAssets("maps/pyconfr23.png", hg.TF_UBorder | hg.TF_VBorder | hg.TF_SamplerMinAnisotropic | hg.TF_SamplerMagAnisotropic)
     prev_sprite_texture = None
 
     hg.ImGuiInit(10, imgui_prg, imgui_img_prg)
@@ -99,7 +103,8 @@ async def main():
         if hg.GetClock() - webcam_reload_timer > hg.time_from_sec_f(1.0 / 30.0): # 30 FPS
             prev_sprite_texture = sprite_texture
             sprite_texture,_ = hg.LoadTextureFromAssets("maps/img" + str(webcam_image_index) + ".png", hg.TF_UBorder | hg.TF_VBorder | hg.TF_SamplerMinAnisotropic | hg.TF_SamplerMagAnisotropic)
-            hg.DestroyTexture(prev_sprite_texture)
+            if prev_sprite_texture is not None:
+                hg.DestroyTexture(prev_sprite_texture)
             scene.GarbageCollect()
             webcam_image_index += 1
             if webcam_image_index > 9:
@@ -117,10 +122,11 @@ async def main():
 
         hg.SetViewRect(view_id, 0, 0, res_x, res_y)
         hg.SetViewClear(view_id, hg.CF_None)
-        sprite_val_uniforms = [hg.MakeUniformSetValue('color', hg.Vec4(1, 1, 1, 1)),]
-        sprite_tex_uniforms = [hg.MakeUniformSetTexture('s_tex', sprite_texture, 0)]
-        sprite_matrix = hg.TransformationMat4(hg.Vec3(0.65, -0.75, 0), hg.Vec3(pi / 2, pi, 0))
-        hg.DrawModel(view_id, sprite_mdl, sprite_prg, sprite_val_uniforms, sprite_tex_uniforms, sprite_matrix)
+        if sprite_texture is not None:
+            sprite_val_uniforms = [hg.MakeUniformSetValue('color', hg.Vec4(1, 1, 1, 1)),]
+            sprite_tex_uniforms = [hg.MakeUniformSetTexture('s_tex', sprite_texture, 0)]
+            sprite_matrix = hg.TransformationMat4(hg.Vec3(0.65, -0.75, 0), hg.Vec3(pi / 2, pi, 0))
+            hg.DrawModel(view_id, sprite_mdl, sprite_prg, sprite_val_uniforms, sprite_tex_uniforms, sprite_matrix)
         view_id += 1
 
         # GUI
