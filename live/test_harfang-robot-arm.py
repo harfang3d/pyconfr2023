@@ -57,8 +57,15 @@ async def main():
     pipeline = hg.CreateForwardPipeline()
     res = hg.PipelineResources()
 
+    print("-assets mounted-")
+    for df in os.listdir("/tmp/assets_compiled"):
+        print(df)
+    await asyncio.sleep(3)
+
+
     if sys.platform == "emscripten":
-        hg.AddAssetsFolder("/tmp/assets_compiled")
+        if not hg.AddAssetsFolder("/tmp/assets_compiled"):
+            raise Error("Assets Folder")
     else:
         hg.AddAssetsFolder("assets_compiled_GL")
 
