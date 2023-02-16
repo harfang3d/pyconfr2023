@@ -1401,39 +1401,40 @@ window.MM.camera.init = function * (width,height, preview, grabber) {
         }
 
         const device = "/dev/video0"
+        const reader = new FileReader()
+        const RR = 10
+
         if (0) {
             MM.camera.fd[device] = FS.open(device, "w")
             const stream = MM.camera.fd[device]
-        }
 
-        const reader = new FileReader()
-        if (0) {
             reader.addEventListener("load", () => {
-                //FS.writeFile(device,  new Int8Array(reader.result) )
                 const stream = MM.camera.fd[device]
                 const data = new Int8Array(reader.result)
-                //FS.write(stream, data, 0, data.length, 0)
-                FS.writeFile(device,  new Int8Array(reader.result) )
-                console.log("frame ready in", device)
+                FS.write(stream, data, 0, data.length, 0)
+                setTimeout(GRABBER, RR)
                 MM.camera.frame[device] = 1
                 }, false
             )
         } else {
             reader.addEventListener("load", () => {
                 const data = new Int8Array(reader.result)
-                //FS.write(stream, data, 0, data.length, 0)
                 FS.writeFile(device,  new Int8Array(reader.result) )
-                console.log("frame ready in", device)
-                setTimeout(GRABBER, 40)
+                setTimeout(GRABBER, RR)
                 }, false
             )
         }
 
         async function GRABBER() {
-            MM.camera.get_raw()
-            MM.camera.blob = await framegrabber.convertToBlob({type:"image/png"})
-            reader.readAsArrayBuffer(MM.camera.blob)
+            if ( !FS.analyzePath(device).exists ) {
+                MM.camera.get_raw()
+                MM.camera.blob = await framegrabber.convertToBlob({type:"image/png"})
+                reader.readAsArrayBuffer(MM.camera.blob)
+            } else {
+                setTimeout(GRABBER, RR)
+            }
         }
+
         window.GRABBER = GRABBER
 
            /*
