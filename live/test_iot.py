@@ -44,22 +44,24 @@ async def step_absolute(board):
     await asyncio.sleep(.2)
 
     # set the max speed and acceleration
-    await board.stepper_set_max_speed(motor, 100)
-    await board.stepper_set_acceleration(motor, 400)
+    await board.stepper_set_max_speed(motor, 512)
+    await board.stepper_set_acceleration(motor, 512)
 
     # set the absolute position in steps
 
 
     # run the motor
-
-    for way in (1,-1,1,-1,1,-1):
-        print('Starting motor...')
+    ALLER = (1,-1)
+    RETOUR = (-1,1)
+    for way in (*ALLER,*RETOUR,*ALLER,*RETOUR):
+        print('\nDémarrage moteur ...')
         await board.stepper_move_to(motor, way * 50)
         await board.stepper_run(motor, completion_callback=the_callback)
         await asyncio.sleep(.2)
         await board.stepper_is_running(motor, callback=running_callback)
         await asyncio.sleep(3)
         await board.stepper_stop(motor)
+        print('\nStarting moteur arrêté ...')
         await asyncio.sleep(2)
 
 
@@ -78,16 +80,17 @@ async def blink(board, pin):
         await asyncio.sleep(2)
 
 
-if 0:
+if 1:
 
     def video_capture(screen):
         skip = 0
         while not aio.exit:
             skip +=1
-            if skip==2:
+            if os.path.isfile("/dev/video0"): #skip==2:
                 surf = pygame.image.load( "/dev/video0" )
                 screen.blit( surf, (320, 0) )
                 pygame.display.update()
+                os.unlink("/dev/video0")
                 skip=0
             yield aio
 

@@ -229,7 +229,7 @@ async def main():
         if not IDLE:
             print("error: motor is busy")
             return
-        pos = int(MOTOR_RATIO * fangle)        
+        pos = - int(MOTOR_RATIO * fangle)        
         print(f"motor going to {pos} steps for {fangle}°")
         IDLE = False                            
         await board.stepper_move_to(motor, pos) 
