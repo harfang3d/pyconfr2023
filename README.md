@@ -8,7 +8,7 @@ Talk d'une heure présenté à la PyConFR 2023 à Bordeaux. Un tour d'horizon et
 
 ### Presentation :
 
- - PDF Slides: [visuels/Portage-Python sur-Webassembly-PyConFR2023.pdf]
+ - PDF Slides: [visuels/Portage-Python-sur-Webassembly-PyConFR2023.pdf]
 
 ### Orateurs : 
 
