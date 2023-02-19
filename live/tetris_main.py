@@ -13,7 +13,7 @@ if sys.platform in ('emscripten','wasi'):
     # http://localhost:8000/live/tetris
     
     aio.fetch.FS("""
-http://localhost:8000/live
+https://pmp-p.ddns.net/pyconfr2023/live
 ├── color_scheme.py
 ├── __init__.py
 ├── loudypixelsky.png
